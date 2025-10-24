@@ -1,0 +1,30 @@
+{
+  "name": "church-conference-website",
+  "version": "1.0.0",
+  "description": "Professional conference meeting website for The Church in Zamboanga City",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=3000 --open=/index.html",
+    "start": "live-server --port=3000 --open=/index.html",
+    "build": "echo 'No build process needed for static site'",
+    "serve": "live-server --port=8080 --open=/index.html"
+  },
+  "keywords": [
+    "church",
+    "conference",
+    "website",
+    "zamboanga",
+    "meeting",
+    "responsive"
+  ],
+  "author": "The Church in Zamboanga City",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/church-conference-website.git"
+  },
+  "homepage": "https://your-username.github.io/church-conference-website"
+}
