@@ -560,3 +560,102 @@ window.addEventListener('scroll', function() {
 });
 
 // Embedded map is automatically responsive
+
+// Payment Modal Functions
+function openPaymentModal() {
+    const modal = document.getElementById('paymentModal');
+    if (modal) {
+        modal.classList.add('active');
+        body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+}
+
+function closePaymentModal() {
+    const modal = document.getElementById('paymentModal');
+    if (modal) {
+        modal.classList.remove('active');
+        body.style.overflow = ''; // Restore scrolling
+    }
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('paymentModal');
+    if (modal && event.target === modal) {
+        closePaymentModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closePaymentModal();
+    }
+});
+
+// Mobile-specific modal enhancements
+function initMobileModalEnhancements() {
+    const modal = document.getElementById('paymentModal');
+    if (!modal) return;
+    
+    // Prevent modal from closing when scrolling on mobile
+    const modalBody = modal.querySelector('.modal-body');
+    if (modalBody) {
+        modalBody.addEventListener('touchstart', function(e) {
+            e.stopPropagation();
+        });
+        
+        modalBody.addEventListener('touchmove', function(e) {
+            e.stopPropagation();
+        });
+    }
+    
+    // Handle mobile orientation changes
+    window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+            if (modal.classList.contains('active')) {
+                // Recalculate modal height after orientation change
+                const modalContent = modal.querySelector('.modal-content');
+                if (modalContent) {
+                    modalContent.style.height = 'auto';
+                    modalContent.style.maxHeight = '90vh';
+                }
+            }
+        }, 100);
+    });
+    
+    // Improve touch scrolling on mobile
+    if (modalBody) {
+        modalBody.style.webkitOverflowScrolling = 'touch';
+        modalBody.style.overflowScrolling = 'touch';
+    }
+    
+    // Handle mobile keyboard appearance
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (viewport) {
+        const originalContent = viewport.getAttribute('content');
+        
+        // Prevent zoom when modal is open
+        modal.addEventListener('DOMNodeInserted', function() {
+            if (modal.classList.contains('active')) {
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            }
+        });
+        
+        // Restore original viewport when modal closes
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    if (!modal.classList.contains('active')) {
+                        viewport.setAttribute('content', originalContent);
+                    }
+                }
+            });
+        });
+        
+        observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
+    }
+}
+
+// Initialize mobile modal enhancements
+document.addEventListener('DOMContentLoaded', initMobileModalEnhancements);

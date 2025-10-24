@@ -269,7 +269,7 @@
                     <div class="form-header">
                         <h3>Register for the Conference</h3>
                         <p>Complete your registration using our secure Google Form</p>
-                    </div>
+                        </div>
                     <div class="registration-requirements">
                         <h4>What to Bring:</h4>
                         <ul>
@@ -279,7 +279,7 @@
                             <li><i class="fas fa-check"></i> Toiletries</li>
                             <li><i class="fas fa-check"></i> Sweater/Jacket for the meeting</li>
                         </ul>
-                    </div>
+                        </div>
                     <div class="registration-button-container">
                         <a href="https://docs.google.com/forms/d/e/1FAIpQLSchoB_Gx_uqTfij_Nth9vIDsEWH-JdvEcu9xOUbbHQb9ai01w/viewform?fbclid=IwY2xjawNnziBleHRuA2FlbQIxMABicmlkETF3NXRKdVJGRzY1Wk4xSEZEAR667AOliq19LC5j2toRpQuEIpx1SzwTXLOKasLUx8zhEVSumCxLSNyjGUaJIw_aem_4tG8HWtKiixtB3LoqmSyWQ" 
                            target="_blank" 
@@ -288,7 +288,7 @@
                             Register Now
                         </a>
                         <p class="registration-note">Click the button above to open the registration form in a new tab</p>
-                    </div>
+                        </div>
                 </div>
             </div>
             
@@ -297,123 +297,208 @@
                 <div class="payment-header">
                     <h3>Payment Instructions</h3>
                     <p class="payment-subtitle">Choose your preferred payment method</p>
+                    <button class="btn btn-primary btn-view-payment" onclick="openPaymentModal()">
+                        <i class="fas fa-credit-card"></i>
+                        View Payment Options
+                    </button>
                 </div>
-                
-                <div class="payment-table-container">
-                    <table class="payment-table">
-                        <thead>
-                            <tr>
-                                <th class="method-column">Payment Method</th>
-                                <th class="details-column">Account Details</th>
-                                <th class="contact-column">Contact Information</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bank-row">
-                                <td class="method-cell">
-                                    <div class="method-info">
-                                        <div class="method-icon bank-icon">🏦</div>
-                                        <div class="method-details">
-                                            <h4>Metro Bank</h4>
-                                            <span class="method-type">Bank Transfer</span>
-                                        </div>
+            </div>
+            
+            <!-- Payment Modal -->
+            <div id="paymentModal" class="payment-modal">
+                <div class="modal-overlay" onclick="closePaymentModal()"></div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                <h3>Payment Instructions</h3>
+                        <button class="modal-close" onclick="closePaymentModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <div class="payment-table-container">
+                            <!-- Desktop Table View -->
+                            <table class="payment-table">
+                                <thead>
+                                    <tr>
+                                        <th class="method-column">Payment Method</th>
+                                        <th class="details-column">Account Details</th>
+                                        <th class="contact-column">Contact Information</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bank-row">
+                                        <td class="method-cell">
+                                            <div class="method-info">
+                                                <div class="method-icon bank-icon">🏦</div>
+                                                <div class="method-details">
+                                                    <h4>Metro Bank</h4>
+                                                    <span class="method-type">Bank Transfer</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="details-cell">
+                                            <div class="account-details">
+                                                <div class="detail-item">
+                                                    <span class="detail-label">Account Number:</span>
+                                                    <span class="detail-value">5107510024172</span>
+                                                </div>
+                                                <div class="detail-item">
+                                                    <span class="detail-label">Account Name:</span>
+                                                    <span class="detail-value">The Church in Zamboanga, Inc.</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="contact-cell">
+                                            <div class="contact-info">
+                                                <div class="contact-item">
+                                                    <i class="fas fa-phone"></i>
+                                                    <span>+63 906 043 5290</span>
+                                                </div>
+                                                <div class="contact-item">
+                                                    <i class="fas fa-user"></i>
+                                                    <span>Sis. Beryl</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="gcash-row">
+                                        <td class="method-cell">
+                                            <div class="method-info">
+                                                <div class="method-icon gcash-icon">💳</div>
+                                                <div class="method-details">
+                                                    <h4>GCash</h4>
+                                                    <span class="method-type">Mobile Payment</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="details-cell">
+                                            <div class="account-details">
+                                                <div class="detail-item">
+                                                    <span class="detail-label">Mobile Number:</span>
+                                                    <span class="detail-value">09761174045</span>
+                                                </div>
+                                                <div class="detail-item">
+                                                    <span class="detail-label">Account Name:</span>
+                                                    <span class="detail-value">Beryl Jamotillo</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="contact-cell">
+                                            <div class="contact-info">
+                                                <div class="contact-item">
+                                                    <i class="fas fa-mobile-alt"></i>
+                                                    <span>09761174045</span>
+                                                </div>
+                                                <div class="contact-item">
+                                                    <i class="fas fa-user"></i>
+                                                    <span>Beryl Jamotillo</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <!-- Mobile Card View -->
+                            <div class="payment-method-card bank-card">
+                                <div class="card-header">
+                                    <div class="card-icon">🏦</div>
+                                    <div>
+                                        <h3 class="card-title">Metro Bank</h3>
+                                        <p class="card-subtitle">Bank Transfer</p>
                                     </div>
-                                </td>
-                                <td class="details-cell">
-                                    <div class="account-details">
-                                        <div class="detail-item">
-                                            <span class="detail-label">Account Number:</span>
-                                            <span class="detail-value">5107510024172</span>
-                                        </div>
-                                        <div class="detail-item">
-                                            <span class="detail-label">Account Name:</span>
-                                            <span class="detail-value">The Church in Zamboanga, Inc.</span>
-                                        </div>
+                                </div>
+                                <div class="card-details">
+                                    <div class="card-detail-item">
+                                        <span class="card-detail-label">Account Number:</span>
+                                        <span class="card-detail-value">5107510024172</span>
                                     </div>
-                                </td>
-                                <td class="contact-cell">
-                                    <div class="contact-info">
-                                        <div class="contact-item">
-                                            <i class="fas fa-phone"></i>
-                                            <span>+63 906 043 5290</span>
-                                        </div>
-                                        <div class="contact-item">
-                                            <i class="fas fa-user"></i>
-                                            <span>Sis. Beryl</span>
-                                        </div>
+                                    <div class="card-detail-item">
+                                        <span class="card-detail-label">Account Name:</span>
+                                        <span class="card-detail-value">The Church in Zamboanga, Inc.</span>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr class="gcash-row">
-                                <td class="method-cell">
-                                    <div class="method-info">
-                                        <div class="method-icon gcash-icon">💳</div>
-                                        <div class="method-details">
-                                            <h4>GCash</h4>
-                                            <span class="method-type">Mobile Payment</span>
-                                        </div>
+                                </div>
+                                <div class="card-contact">
+                                    <div class="card-contact-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>+63 906 043 5290</span>
                                     </div>
-                                </td>
-                                <td class="details-cell">
-                                    <div class="account-details">
-                                        <div class="detail-item">
-                                            <span class="detail-label">Mobile Number:</span>
-                                            <span class="detail-value">09761174045</span>
-                                        </div>
-                                        <div class="detail-item">
-                                            <span class="detail-label">Account Name:</span>
-                                            <span class="detail-value">Beryl Jamotillo</span>
-                                        </div>
+                                    <div class="card-contact-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>Sis. Beryl</span>
                                     </div>
-                                </td>
-                                <td class="contact-cell">
-                                    <div class="contact-info">
-                                        <div class="contact-item">
-                                            <i class="fas fa-mobile-alt"></i>
-                                            <span>09761174045</span>
-                                        </div>
-                                        <div class="contact-item">
-                                            <i class="fas fa-user"></i>
-                                            <span>Beryl Jamotillo</span>
-                                        </div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method-card gcash-card">
+                                <div class="card-header">
+                                    <div class="card-icon">💳</div>
+                                    <div>
+                                        <h3 class="card-title">GCash</h3>
+                                        <p class="card-subtitle">Mobile Payment</p>
                                     </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="payment-notes-section">
-                    <h4>📋 Important Instructions</h4>
-                    <div class="notes-grid">
-                        <div class="note-item">
-                            <div class="note-icon">📧</div>
-                            <div class="note-content">
-                                <h5>Email Submission</h5>
-                                <p>Send a copy of the deposit slip or GCash screenshot together with the list of names to: <a href="mailto:churchinzamboanga@gmail.com" class="email-link">churchinzamboanga@gmail.com</a></p>
+                                </div>
+                                <div class="card-details">
+                                    <div class="card-detail-item">
+                                        <span class="card-detail-label">Mobile Number:</span>
+                                        <span class="card-detail-value">09761174045</span>
+                                    </div>
+                                    <div class="card-detail-item">
+                                        <span class="card-detail-label">Account Name:</span>
+                                        <span class="card-detail-value">Beryl Jamotillo</span>
+                                    </div>
+                                </div>
+                                <div class="card-contact">
+                                    <div class="card-contact-item">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <span>09761174045</span>
+                                    </div>
+                                    <div class="card-contact-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>Beryl Jamotillo</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="note-item">
-                            <div class="note-icon">📝</div>
-                            <div class="note-content">
-                                <h5>Outline Requirements</h5>
-                                <p>Indicate in the list how many English and Cebuano outlines are needed</p>
+                        
+                        <div class="payment-notes-section">
+                            <h4>📋 Important Instructions</h4>
+                            <div class="notes-grid">
+                                <div class="note-item">
+                                    <div class="note-icon">📧</div>
+                                    <div class="note-content">
+                                        <h5>Email Submission</h5>
+                                        <p>Send a copy of the deposit slip or GCash screenshot together with the list of names to: <a href="mailto:churchinzamboanga@gmail.com" class="email-link">churchinzamboanga@gmail.com</a></p>
+                                    </div>
+                                </div>
+                                <div class="note-item">
+                                    <div class="note-icon">📝</div>
+                                    <div class="note-content">
+                                        <h5>Outline Requirements</h5>
+                                        <p>Indicate in the list how many English and Cebuano outlines are needed</p>
+                                    </div>
+                                </div>
+                                <div class="note-item">
+                                    <div class="note-icon">⏰</div>
+                                    <div class="note-content">
+                                        <h5>Registration Deadline</h5>
+                                        <p>Registration deadline: <strong>November 2, 2025</strong></p>
+                                    </div>
+                                </div>
+                                <div class="note-item">
+                                    <div class="note-icon">🏘️</div>
+                                    <div class="note-content">
+                                        <h5>Registration Method</h5>
+                                        <p>Please register by locality or by province</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="note-item">
-                            <div class="note-icon">⏰</div>
-                            <div class="note-content">
-                                <h5>Registration Deadline</h5>
-                                <p>Registration deadline: <strong>November 2, 2025</strong></p>
-                            </div>
-                        </div>
-                        <div class="note-item">
-                            <div class="note-icon">🏘️</div>
-                            <div class="note-content">
-                                <h5>Registration Method</h5>
-                                <p>Please register by locality or by province</p>
-                            </div>
-                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="closePaymentModal()">Close</button>
                     </div>
                 </div>
             </div>
