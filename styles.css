@@ -61,6 +61,132 @@ body {
     transition: transform 0.3s ease;
 }
 
+/* CSS Church Icon as fallback */
+.css-church-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+}
+
+.css-church-icon::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: white;
+    position: relative;
+    border-radius: 2px;
+}
+
+.css-church-icon::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 8px solid white;
+}
+
+.css-church-icon .cross {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 6px;
+    background: white;
+}
+
+.css-church-icon .cross::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: -1px;
+    width: 4px;
+    height: 2px;
+    background: white;
+}
+
+/* Hero section church icon */
+.hero-logo-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.hero-logo-icon::before {
+    width: 60px;
+    height: 60px;
+}
+
+.hero-logo-icon::after {
+    top: 24px;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 24px solid white;
+}
+
+.hero-logo-icon .cross {
+    top: 6px;
+    width: 6px;
+    height: 18px;
+}
+
+.hero-logo-icon .cross::before {
+    top: 6px;
+    left: -3px;
+    width: 12px;
+    height: 6px;
+}
+
+/* Footer church icon */
+.footer-logo-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+}
+
+.footer-logo-icon::before {
+    width: 25px;
+    height: 25px;
+}
+
+.footer-logo-icon::after {
+    top: 10px;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 10px solid white;
+}
+
+.footer-logo-icon .cross {
+    top: 3px;
+    width: 3px;
+    height: 8px;
+}
+
+.footer-logo-icon .cross::before {
+    top: 3px;
+    left: -1px;
+    width: 5px;
+    height: 3px;
+}
+
+/* Hover effects for church icons */
+.css-church-icon:hover {
+    transform: scale(1.1);
+}
+
 .logo-img:hover {
     transform: scale(1.1);
 }
@@ -373,6 +499,19 @@ body {
 .image-placeholder i {
     font-size: 4rem;
     margin-bottom: 1rem;
+}
+
+.about-logo-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.about-logo-img:hover {
+    transform: scale(1.05);
 }
 
 /* Schedule Section */
@@ -973,6 +1112,27 @@ body {
     }
 }
 
+/* Enhanced Mobile Navigation */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1001;
+}
+
+.hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hamburger {
@@ -984,50 +1144,159 @@ body {
         left: -100%;
         top: 70px;
         flex-direction: column;
-        background-color: white;
+        background-color: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
         width: 100%;
         text-align: center;
-        transition: 0.3s;
-        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+        transition: 0.3s ease;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.1);
         padding: 2rem 0;
+        z-index: 1000;
     }
     
     .nav-menu.active {
         left: 0;
     }
     
+    .nav-link {
+        padding: 1rem 0;
+        font-size: 1.1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-link:last-child {
+        border-bottom: none;
+    }
+    
+    /* Mobile Hero Section */
+    .hero {
+        padding: 0 20px;
+    }
+    
+    .hero-content {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+    
+    .hero-logo-img {
+        width: 80px;
+        height: 80px;
+    }
+    
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        line-height: 1.2;
+        margin-bottom: 0.8rem;
     }
     
     .hero-subtitle {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-description {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
     }
     
     .hero-details {
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.8rem;
+        margin-bottom: 2rem;
+    }
+    
+    .detail-item {
+        font-size: 1rem;
+        justify-content: center;
     }
     
     .hero-buttons {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
+        width: 100%;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 280px;
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    
+    /* Mobile Section Headers */
+    .section-header {
+        margin-bottom: 2.5rem;
     }
     
     .section-header h2 {
         font-size: 2rem;
+        line-height: 1.3;
     }
     
-    .about-content,
-    .location-content,
-    .registration-content {
+    .section-header p {
+        font-size: 1rem;
+    }
+    
+    /* Mobile About Section */
+    .about {
+        padding: 60px 0;
+    }
+    
+    .about-content {
         grid-template-columns: 1fr;
         gap: 2rem;
+    }
+    
+    .about-text h3 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+    
+    .about-text p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .features {
+        gap: 1rem;
+    }
+    
+    .feature {
+        padding: 1rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+    }
+    
+    .feature i {
+        font-size: 1.8rem;
+        margin-top: 0;
+    }
+    
+    .image-placeholder {
+        height: 250px;
+        font-size: 1rem;
+    }
+    
+    .image-placeholder i {
+        font-size: 3rem;
+    }
+    
+    .about-logo-img {
+        width: 80px;
+        height: 80px;
+    }
+    
+    /* Mobile Schedule Section */
+    .schedule {
+        padding: 60px 0;
     }
     
     .timeline-item {
         flex-direction: column;
         gap: 1rem;
+        margin-bottom: 2rem;
     }
     
     .timeline-item::after {
@@ -1036,14 +1305,130 @@ body {
     
     .timeline-date {
         width: 100%;
-        max-width: 200px;
+        max-width: 150px;
         margin: 0 auto;
+        padding: 0.8rem;
     }
     
-    .footer-content {
+    .timeline-date .day {
+        font-size: 1.5rem;
+    }
+    
+    .timeline-content {
+        padding: 1.5rem;
+    }
+    
+    .timeline-content h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .event {
+        padding: 0.6rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .event .time {
+        font-size: 0.9rem;
+        min-width: auto;
+    }
+    
+    /* Mobile Location Section */
+    .location {
+        padding: 60px 0;
+    }
+    
+    .location-content {
         grid-template-columns: 1fr;
         gap: 2rem;
+    }
+    
+    .location-info h3 {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .address {
+        padding: 1rem;
+        flex-direction: column;
         text-align: center;
+        gap: 0.8rem;
+    }
+    
+    .contact-item {
+        padding: 0.8rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .map-container {
+        height: 300px;
+    }
+    
+    /* Mobile Registration Section */
+    .register {
+        padding: 60px 0;
+    }
+    
+    .registration-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .registration-info h3 {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .price-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+    
+    .price-item h4 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .price {
+        font-size: 1.3rem;
+    }
+    
+    .registration-form {
+        padding: 1.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+    
+    .form-group label {
+        font-size: 0.95rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px;
+        font-size: 0.95rem;
+    }
+    
+    .btn-full {
+        padding: 12px;
+        font-size: 1rem;
+    }
+    
+    /* Mobile Payment & Accommodation */
+    .payment-info,
+    .accommodation-info {
+        margin-top: 2rem;
+        padding: 1.5rem;
     }
     
     .payment-details,
@@ -1052,14 +1437,410 @@ body {
         gap: 1.5rem;
     }
     
-    .payment-details {
+    .bank-info, .gcash-info, .payment-notes,
+    .free-accommodation, .hotel-info {
+        padding: 1.2rem;
+    }
+    
+    /* Mobile Footer */
+    .footer {
+        padding: 40px 0 20px;
+    }
+    
+    .footer-content {
         grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .footer-logo {
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .footer-logo-img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .social-links {
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+    
+    .footer-section .contact-item {
+        padding: 0.6rem;
+        margin-bottom: 0.6rem;
     }
 }
 
+/* Extra Small Mobile Devices */
 @media (max-width: 480px) {
     .container {
         padding: 0 15px;
+    }
+    
+    /* Navigation */
+    .nav-container {
+        padding: 0 15px;
+        height: 60px;
+    }
+    
+    .nav-logo {
+        font-size: 1.2rem;
+    }
+    
+    .logo-img {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .nav-menu {
+        top: 60px;
+        padding: 1.5rem 0;
+    }
+    
+    /* Hero Section */
+    .hero {
+        height: 100vh;
+        min-height: 600px;
+    }
+    
+    .hero-content {
+        padding: 0 5px;
+    }
+    
+    .hero-logo-img {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
+        line-height: 1.1;
+        margin-bottom: 0.6rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+        margin-bottom: 1.2rem;
+        line-height: 1.5;
+    }
+    
+    .hero-details {
+        gap: 0.6rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .detail-item {
+        font-size: 0.9rem;
+        gap: 0.4rem;
+    }
+    
+    .detail-item i {
+        font-size: 1.1rem;
+    }
+    
+    .hero-buttons {
+        gap: 0.8rem;
+    }
+    
+    .btn {
+        padding: 10px 18px;
+        font-size: 0.95rem;
+        max-width: 250px;
+    }
+    
+    /* Section Headers */
+    .section-header {
+        margin-bottom: 2rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1.7rem;
+        line-height: 1.2;
+    }
+    
+    .section-header p {
+        font-size: 0.95rem;
+    }
+    
+    /* About Section */
+    .about {
+        padding: 50px 0;
+    }
+    
+    .about-text h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .about-text p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .feature {
+        padding: 0.8rem;
+        gap: 0.6rem;
+    }
+    
+    .feature i {
+        font-size: 1.6rem;
+    }
+    
+    .feature h4 {
+        font-size: 1.1rem;
+    }
+    
+    .feature p {
+        font-size: 0.9rem;
+    }
+    
+    .image-placeholder {
+        height: 200px;
+        font-size: 0.9rem;
+    }
+    
+    .image-placeholder i {
+        font-size: 2.5rem;
+    }
+    
+    /* Schedule Section */
+    .schedule {
+        padding: 50px 0;
+    }
+    
+    .timeline-date {
+        max-width: 120px;
+        padding: 0.6rem;
+    }
+    
+    .timeline-date .day {
+        font-size: 1.3rem;
+    }
+    
+    .timeline-date .month {
+        font-size: 0.9rem;
+    }
+    
+    .timeline-content {
+        padding: 1.2rem;
+    }
+    
+    .timeline-content h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .event {
+        padding: 0.5rem;
+        gap: 0.4rem;
+    }
+    
+    .event .time {
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+    
+    .event .event-title {
+        font-size: 0.9rem;
+    }
+    
+    /* Location Section */
+    .location {
+        padding: 50px 0;
+    }
+    
+    .location-info h3 {
+        font-size: 1.4rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .address {
+        padding: 0.8rem;
+        gap: 0.6rem;
+    }
+    
+    .address i {
+        font-size: 1.3rem;
+    }
+    
+    .contact-item {
+        padding: 0.6rem;
+        gap: 0.4rem;
+    }
+    
+    .contact-item i {
+        font-size: 1.1rem;
+    }
+    
+    .contact-item span {
+        font-size: 0.9rem;
+    }
+    
+    .map-container {
+        height: 250px;
+    }
+    
+    /* Registration Section */
+    .register {
+        padding: 50px 0;
+    }
+    
+    .registration-info h3 {
+        font-size: 1.4rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .price-item {
+        padding: 0.8rem;
+        gap: 0.4rem;
+    }
+    
+    .price-item h4 {
+        font-size: 0.95rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .price {
+        font-size: 1.2rem;
+    }
+    
+    .price-item p {
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+    
+    .registration-form {
+        padding: 1.2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-full {
+        padding: 10px;
+        font-size: 0.95rem;
+    }
+    
+    /* Payment & Accommodation */
+    .payment-info,
+    .accommodation-info {
+        margin-top: 1.5rem;
+        padding: 1.2rem;
+    }
+    
+    .payment-info h3,
+    .accommodation-info h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .bank-info, .gcash-info, .payment-notes,
+    .free-accommodation, .hotel-info {
+        padding: 1rem;
+    }
+    
+    .bank-info h4, .gcash-info h4, .payment-notes h4,
+    .free-accommodation h4, .hotel-info h4 {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .bank-info p, .gcash-info p, .payment-notes p,
+    .free-accommodation p, .hotel-info p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    /* Footer */
+    .footer {
+        padding: 30px 0 15px;
+    }
+    
+    .footer-logo {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .footer-logo-img {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .footer-section h4 {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .footer-section ul li {
+        margin-bottom: 0.4rem;
+    }
+    
+    .footer-section ul li a {
+        font-size: 0.9rem;
+    }
+    
+    .footer-section .contact-item {
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .footer-section .contact-item span {
+        font-size: 0.85rem;
+    }
+    
+    .social-links {
+        gap: 0.8rem;
+        margin-top: 1rem;
+    }
+    
+    .social-links a {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .footer-bottom {
+        padding-top: 1.5rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Landscape Mobile Devices */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding: 60px 0;
+    }
+    
+    .hero-content {
+        padding: 2rem 0;
+    }
+    
+    .hero-logo-img {
+        width: 60px;
+        height: 60px;
     }
     
     .hero-title {
@@ -1067,24 +1848,173 @@ body {
     }
     
     .hero-subtitle {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
     
     .hero-description {
-        font-size: 1.1rem;
-    }
-    
-    .btn {
-        padding: 12px 24px;
         font-size: 1rem;
     }
     
-    .section-header h2 {
-        font-size: 1.8rem;
+    .hero-details {
+        flex-direction: row;
+        justify-content: center;
+        gap: 2rem;
     }
     
-    .timeline-content,
-    .registration-form {
-        padding: 1.5rem;
+    .hero-buttons {
+        flex-direction: row;
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .btn {
+        max-width: 200px;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        min-height: 44px;
+        padding: 12px 20px;
+    }
+    
+    .nav-link {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        min-height: 44px;
+    }
+    
+    .social-links a {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    .hamburger {
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Mobile-specific performance optimizations */
+@media (max-width: 768px) {
+    /* Reduce animations on mobile for better performance */
+    .hero-logo-img,
+    .feature,
+    .timeline-item,
+    .price-item {
+        animation: none;
+        transition: none;
+    }
+    
+    /* Optimize scrolling performance */
+    .hero,
+    .about,
+    .schedule,
+    .location,
+    .register {
+        will-change: auto;
+    }
+    
+    /* Improve text rendering on mobile */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+    
+    /* Optimize images for mobile */
+    .logo-img,
+    .hero-logo-img,
+    .footer-logo-img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Mobile-specific utility classes */
+.mobile-device .hero {
+    background-attachment: scroll; /* Disable parallax on mobile */
+}
+
+.mobile-device .hero::before {
+    display: none; /* Hide decorative elements on mobile */
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        -webkit-appearance: none;
+        border-radius: 8px;
+    }
+    
+    .btn {
+        -webkit-appearance: none;
+        border-radius: 50px;
+    }
+}
+
+/* Android Chrome specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #2c5aa0;
+        box-shadow: 0 0 0 2px rgba(44, 90, 160, 0.2);
+    }
+}
+
+/* High DPI mobile displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .logo-img,
+    .hero-logo-img,
+    .footer-logo-img {
+        image-rendering: -webkit-optimize-contrast;
+    }
+}
+
+/* Dark mode support for mobile */
+@media (prefers-color-scheme: dark) and (max-width: 768px) {
+    .navbar {
+        background: rgba(0, 0, 0, 0.95);
+        color: white;
+    }
+    
+    .nav-link {
+        color: white;
+    }
+    
+    .nav-link:hover {
+        color: #3498db;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .hero-logo-img,
+    .feature,
+    .timeline-item,
+    .price-item,
+    .btn,
+    .nav-link {
+        animation: none;
+        transition: none;
+    }
+    
+    .scroll-indicator {
+        animation: none;
     }
 }

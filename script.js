@@ -1,17 +1,61 @@
-// Mobile Navigation Toggle
+// Enhanced Mobile Navigation Toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
+const body = document.body;
 
+// Mobile menu toggle with body scroll lock
 hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
+    
+    // Prevent body scroll when menu is open
+    if (navMenu.classList.contains('active')) {
+        body.style.overflow = 'hidden';
+    } else {
+        body.style.overflow = '';
+    }
 });
 
 // Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
     hamburger.classList.remove('active');
     navMenu.classList.remove('active');
+    body.style.overflow = '';
 }));
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+        body.style.overflow = '';
+    }
+});
+
+// Close mobile menu on escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+        body.style.overflow = '';
+    }
+});
+
+// Touch-friendly navigation improvements
+if ('ontouchstart' in window) {
+    // Add touch feedback to navigation links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('touchstart', function() {
+            this.style.backgroundColor = 'rgba(44, 90, 160, 0.1)';
+        });
+        
+        link.addEventListener('touchend', function() {
+            setTimeout(() => {
+                this.style.backgroundColor = '';
+            }, 150);
+        });
+    });
+}
 
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -440,3 +484,148 @@ document.head.appendChild(revealStyle);
 // Initialize scroll reveal
 window.addEventListener('scroll', revealOnScroll);
 document.addEventListener('DOMContentLoaded', revealOnScroll);
+
+// Mobile-specific enhancements
+function initMobileEnhancements() {
+    // Add mobile-specific classes for better styling
+    if (window.innerWidth <= 768) {
+        document.body.classList.add('mobile-device');
+    }
+    
+    // Handle orientation changes
+    window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+            // Recalculate hero height on orientation change
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.height = '100vh';
+            }
+        }, 100);
+    });
+    
+    // Improve form interactions on mobile
+    const formInputs = document.querySelectorAll('input, select, textarea');
+    formInputs.forEach(input => {
+        // Prevent zoom on input focus (iOS Safari)
+        if (input.type === 'text' || input.type === 'email' || input.type === 'tel' || input.type === 'number') {
+            input.addEventListener('focus', function() {
+                if (window.innerWidth <= 768) {
+                    this.style.fontSize = '16px';
+                }
+            });
+        }
+        
+        // Add touch feedback
+        input.addEventListener('touchstart', function() {
+            this.style.backgroundColor = 'rgba(44, 90, 160, 0.05)';
+        });
+        
+        input.addEventListener('touchend', function() {
+            setTimeout(() => {
+                this.style.backgroundColor = '';
+            }, 150);
+        });
+    });
+    
+    // Improve button touch interactions
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        button.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+            this.style.transition = 'transform 0.1s ease';
+        });
+        
+        button.addEventListener('touchend', function() {
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 100);
+        });
+    });
+    
+    // Add swipe gestures for mobile navigation (optional)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    document.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const swipeDistance = touchEndX - touchStartX;
+        
+        // Swipe right to open menu (only if menu is closed)
+        if (swipeDistance > swipeThreshold && !navMenu.classList.contains('active')) {
+            hamburger.classList.add('active');
+            navMenu.classList.add('active');
+            body.style.overflow = 'hidden';
+        }
+        // Swipe left to close menu (only if menu is open)
+        else if (swipeDistance < -swipeThreshold && navMenu.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            body.style.overflow = '';
+        }
+    }
+}
+
+// Initialize mobile enhancements
+document.addEventListener('DOMContentLoaded', initMobileEnhancements);
+
+// Handle window resize for responsive behavior
+window.addEventListener('resize', function() {
+    // Remove mobile class if screen is large
+    if (window.innerWidth > 768) {
+        document.body.classList.remove('mobile-device');
+        // Close mobile menu if open
+        if (navMenu.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            body.style.overflow = '';
+        }
+    } else {
+        document.body.classList.add('mobile-device');
+    }
+});
+
+// Mobile-optimized scroll behavior
+let ticking = false;
+function updateScrollEffects() {
+    const navbar = document.querySelector('.navbar');
+    const scrollY = window.scrollY;
+    
+    if (scrollY > 50) {
+        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+    } else {
+        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+        navbar.style.boxShadow = 'none';
+    }
+    
+    ticking = false;
+}
+
+window.addEventListener('scroll', function() {
+    if (!ticking) {
+        requestAnimationFrame(updateScrollEffects);
+        ticking = true;
+    }
+});
+
+// Mobile-friendly map loading
+function initMobileMap() {
+    const mapContainer = document.getElementById('map');
+    if (mapContainer && window.innerWidth <= 768) {
+        // Add mobile-specific map styles
+        mapContainer.style.height = '250px';
+        mapContainer.style.borderRadius = '10px';
+    }
+}
+
+// Initialize mobile map on load
+document.addEventListener('DOMContentLoaded', initMobileMap);
