@@ -83,65 +83,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Google Maps Integration
-function initMap() {
-    // Zamboanga City coordinates
-    const zamboangaCity = { lat: 6.9214, lng: 122.0790 };
-    
-    // Create the map
-    const map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
-        center: zamboangaCity,
-        mapTypeId: 'roadmap',
-        styles: [
-            {
-                featureType: 'poi',
-                elementType: 'labels',
-                stylers: [{ visibility: 'off' }]
-            }
-        ]
-    });
-    
-    // Add a marker for the church location
-    const marker = new google.maps.Marker({
-        position: { lat: 6.9214, lng: 122.0790 },
-        map: map,
-        title: 'The Church in Zamboanga City',
-        icon: {
-            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="20" cy="20" r="18" fill="#2c5aa0" stroke="white" stroke-width="2"/>
-                    <path d="M20 8 L25 15 L30 15 L25 20 L30 25 L25 25 L20 30 L15 25 L10 25 L15 20 L10 15 L15 15 Z" fill="white"/>
-                </svg>
-            `),
-            scaledSize: new google.maps.Size(40, 40)
-        }
-    });
-    
-    // Add info window
-    const infoWindow = new google.maps.InfoWindow({
-        content: `
-            <div style="padding: 10px; max-width: 250px;">
-                <h3 style="margin: 0 0 10px 0; color: #2c5aa0; font-size: 16px;">The Church in Zamboanga City</h3>
-                <p style="margin: 0 0 8px 0; font-size: 14px;">Paseo del Mar, Zamboanga City</p>
-                <p style="margin: 0; font-size: 14px; color: #666;">Zamboanga del Sur, Philippines</p>
-                <div style="margin-top: 10px;">
-                    <a href="https://maps.google.com/?q=6.9214,122.0790" target="_blank" 
-                       style="color: #2c5aa0; text-decoration: none; font-size: 14px;">
-                        Get Directions
-                    </a>
-                </div>
-            </div>
-        `
-    });
-    
-    marker.addListener('click', () => {
-        infoWindow.open(map, marker);
-    });
-    
-    // Add click listener to open info window by default
-    infoWindow.open(map, marker);
-}
+// Embedded Google Maps - No initialization needed
 
 // Registration Form Handling
 const registrationForm = document.getElementById('registrationForm');
@@ -617,15 +559,4 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Mobile-friendly map loading
-function initMobileMap() {
-    const mapContainer = document.getElementById('map');
-    if (mapContainer && window.innerWidth <= 768) {
-        // Add mobile-specific map styles
-        mapContainer.style.height = '250px';
-        mapContainer.style.borderRadius = '10px';
-    }
-}
-
-// Initialize mobile map on load
-document.addEventListener('DOMContentLoaded', initMobileMap);
+// Embedded map is automatically responsive
