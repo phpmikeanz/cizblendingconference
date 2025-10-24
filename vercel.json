@@ -1,30 +1,4 @@
 {
   "version": 2,
-  "outputDirectory": ".",
-  "buildCommand": "echo 'Static site - no build needed'",
-  "installCommand": "npm install",
-  "builds": [
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "styles.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "script.js",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "cizz.png",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ]
+  "outputDirectory": "public"
 }
