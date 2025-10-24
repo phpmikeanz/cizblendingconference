@@ -7,6 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#2c5aa0">
+    <link rel="icon" type="image/png" href="cizz.png">
     <title>The Church in Zamboanga City - Conference Meeting</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -32,6 +33,10 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
+        </div>
+        <!-- Scroll Progress Bar -->
+        <div class="scroll-progress">
+            <div class="scroll-progress-bar"></div>
         </div>
     </nav>
 
@@ -83,8 +88,8 @@
                     
                     <div class="conference-highlights">
                         <h4 class="highlights-title">Conference Highlights</h4>
-                        <div class="features">
-                            <div class="feature">
+                    <div class="features">
+                        <div class="feature">
                                 <div class="feature-icon">
                                     <i class="fas fa-bible"></i>
                                 </div>
@@ -92,8 +97,8 @@
                                     <h4>Ministry of the Word</h4>
                                     <p>Enjoy rich sharing from the ministry of Watchman Nee and Witness Lee, focusing on God's eternal purpose, the experience of Christ as life, and the practical building up of the Body of Christ.</p>
                                 </div>
-                            </div>
-                            <div class="feature">
+                        </div>
+                        <div class="feature">
                                 <div class="feature-icon">
                                     <i class="fas fa-bread-slice"></i>
                                 </div>
@@ -101,8 +106,8 @@
                                     <h4>Church Life & Blending</h4>
                                     <p>Participate in blending among the churches according to the practice of the New Testament, for the building up of the Body in oneness and reality.</p>
                                 </div>
-                            </div>
-                            <div class="feature">
+                        </div>
+                        <div class="feature">
                                 <div class="feature-icon">
                                     <i class="fas fa-hands"></i>
                                 </div>
@@ -616,6 +621,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" onclick="scrollToTop()">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 
     <script src="script.js"></script>
 </body>

@@ -1,133 +1,230 @@
 // Enhanced Mobile Navigation Toggle
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
-const body = document.body;
+function initMobileNavigation() {
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    const body = document.body;
 
-// Mobile menu toggle with body scroll lock
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-    
-    // Prevent body scroll when menu is open
-    if (navMenu.classList.contains('active')) {
-        body.style.overflow = 'hidden';
-    } else {
-        body.style.overflow = '';
+    if (!hamburger || !navMenu) {
+        console.log('Mobile navigation elements not found');
+        return;
     }
-});
 
-// Close mobile menu when clicking on a link
-document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
-    hamburger.classList.remove('active');
-    navMenu.classList.remove('active');
-    body.style.overflow = '';
-}));
-
-// Close mobile menu when clicking outside
-document.addEventListener('click', (e) => {
-    if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-        body.style.overflow = '';
-    }
-});
-
-// Close mobile menu on escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-        body.style.overflow = '';
-    }
-});
-
-// Touch-friendly navigation improvements
-if ('ontouchstart' in window) {
-    // Add touch feedback to navigation links
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('touchstart', function() {
-            this.style.backgroundColor = 'rgba(44, 90, 160, 0.1)';
-        });
+    // Mobile menu toggle with body scroll lock
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
         
-        link.addEventListener('touchend', function() {
-            setTimeout(() => {
-                this.style.backgroundColor = '';
-            }, 150);
-        });
+        // Prevent body scroll when menu is open
+        if (navMenu.classList.contains('active')) {
+            body.style.overflow = 'hidden';
+        } else {
+            body.style.overflow = '';
+        }
+    });
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+        body.style.overflow = '';
+    }));
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            body.style.overflow = '';
+        }
+    });
+
+    // Close mobile menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            body.style.overflow = '';
+        }
     });
 }
 
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+// Touch-friendly navigation improvements
+function initTouchNavigation() {
+    if ('ontouchstart' in window) {
+        // Add touch feedback to navigation links
+        const navLinks = document.querySelectorAll('.nav-link');
+        if (navLinks.length > 0) {
+            navLinks.forEach(link => {
+                link.addEventListener('touchstart', function() {
+                    this.style.backgroundColor = 'rgba(44, 90, 160, 0.1)';
+                });
+                
+                link.addEventListener('touchend', function() {
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                    }, 150);
+                });
             });
         }
-    });
-});
+    }
+}
+
+// Smooth scrolling for navigation links
+function initSmoothScrolling() {
+    const anchors = document.querySelectorAll('a[href^="#"]');
+    if (anchors.length > 0) {
+        anchors.forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    }
+}
+
+// Active Navigation Highlighting
+function initActiveNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
+    
+    if (navLinks.length === 0 || sections.length === 0) {
+        console.log('Navigation links or sections not found');
+        return;
+    }
+    
+    function updateActiveNav() {
+        let current = '';
+        const scrollPos = window.scrollY + 100; // Offset for better detection
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+            
+            if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                current = sectionId;
+            }
+        });
+        
+        // Remove active class from all links
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Add active class to current section link
+        if (current) {
+            const activeLink = document.querySelector(`.nav-link[href="#${current}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+    }
+    
+    // Throttled scroll event for better performance
+    const throttledUpdate = throttle(updateActiveNav, 100);
+    window.addEventListener('scroll', throttledUpdate);
+    
+    // Initial call to set active state
+    updateActiveNav();
+    
+    console.log('Active navigation initialized');
+}
 
 // Navbar background change on scroll
-window.addEventListener('scroll', () => {
+function initNavbarScroll() {
     const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.boxShadow = 'none';
+    if (!navbar) return;
+    
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+        } else {
+            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            navbar.style.boxShadow = 'none';
+        }
+    });
+}
+
+// Scroll Progress Bar
+function initScrollProgress() {
+    const progressBar = document.querySelector('.scroll-progress-bar');
+    if (!progressBar) return;
+    
+    function updateScrollProgress() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        
+        progressBar.style.width = scrollPercent + '%';
     }
-});
+    
+    // Throttled scroll event for better performance
+    const throttledUpdate = throttle(updateScrollProgress, 10);
+    window.addEventListener('scroll', throttledUpdate);
+    
+    console.log('Scroll progress bar initialized');
+}
 
 // Embedded Google Maps - No initialization needed
 
 // Registration Form Handling
-const registrationForm = document.getElementById('registrationForm');
-
-registrationForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Get form data
-    const formData = new FormData(registrationForm);
-    const registrationData = {};
-    
-    for (let [key, value] of formData.entries()) {
-        registrationData[key] = value;
-    }
-    
-    // Validate required fields
-    const requiredFields = ['fullName', 'email', 'phone', 'registrationType'];
-    let isValid = true;
-    
-    requiredFields.forEach(field => {
-        if (!registrationData[field]) {
-            isValid = false;
-            const input = document.getElementById(field);
-            input.style.borderColor = '#dc3545';
-            input.addEventListener('input', function() {
-                this.style.borderColor = '#e0e0e0';
-            });
-        }
-    });
-    
-    if (!isValid) {
-        showNotification('Please fill in all required fields.', 'error');
+function initRegistrationForm() {
+    const registrationForm = document.getElementById('registrationForm');
+    if (!registrationForm) {
+        console.log('Registration form not found');
         return;
     }
-    
-    // Simulate form submission
-    showNotification('Registration submitted successfully! We will contact you soon.', 'success');
-    
-    // Reset form
-    registrationForm.reset();
-    
-    // In a real application, you would send the data to a server
-    console.log('Registration Data:', registrationData);
-});
+
+    registrationForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = new FormData(registrationForm);
+        const registrationData = {};
+        
+        for (let [key, value] of formData.entries()) {
+            registrationData[key] = value;
+        }
+        
+        // Validate required fields
+        const requiredFields = ['fullName', 'email', 'phone', 'registrationType'];
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            if (!registrationData[field]) {
+                isValid = false;
+                const input = document.getElementById(field);
+                if (input) {
+                    input.style.borderColor = '#dc3545';
+                    input.addEventListener('input', function() {
+                        this.style.borderColor = '#e0e0e0';
+                    });
+                }
+            }
+        });
+        
+        if (!isValid) {
+            showNotification('Please fill in all required fields.', 'error');
+            return;
+        }
+        
+        // Simulate form submission
+        showNotification('Registration submitted successfully! We will contact you soon.', 'success');
+        
+        // Reset form
+        registrationForm.reset();
+        
+        // In a real application, you would send the data to a server
+        console.log('Registration Data:', registrationData);
+    });
+}
 
 // Notification System
 function showNotification(message, type = 'info') {
@@ -659,3 +756,100 @@ function initMobileModalEnhancements() {
 
 // Initialize mobile modal enhancements
 document.addEventListener('DOMContentLoaded', initMobileModalEnhancements);
+
+// Back to Top Button Functionality
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+// Show/hide back to top button based on scroll position
+let lastScrollTop = 0;
+let isScrollingDown = false;
+
+function toggleBackToTopButton() {
+    const backToTopButton = document.getElementById('backToTop');
+    if (!backToTopButton) return;
+    
+    const currentScrollTop = window.scrollY;
+    
+    // Determine scroll direction
+    if (currentScrollTop > lastScrollTop) {
+        // Scrolling down
+        isScrollingDown = true;
+    } else {
+        // Scrolling up
+        isScrollingDown = false;
+    }
+    
+    // Show button when scrolled down more than 300px
+    if (currentScrollTop > 300) {
+        backToTopButton.classList.add('show');
+    } else {
+        backToTopButton.classList.remove('show');
+    }
+    
+    lastScrollTop = currentScrollTop;
+}
+
+// Throttle function for better performance
+function throttle(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Initialize back to top button
+function initBackToTopButton() {
+    const backToTopButton = document.getElementById('backToTop');
+    if (!backToTopButton) return;
+    
+    // Add throttled scroll event listener for better performance
+    const throttledToggle = throttle(toggleBackToTopButton, 100);
+    window.addEventListener('scroll', throttledToggle);
+    
+    // Add touch support for mobile
+    if ('ontouchstart' in window) {
+        backToTopButton.addEventListener('touchstart', function() {
+            this.style.transform = 'translateY(-1px) scale(0.95)';
+        });
+        
+        backToTopButton.addEventListener('touchend', function() {
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 100);
+        });
+    }
+    
+    // Debug: Log scroll events
+    console.log('Back to top button initialized');
+}
+
+// Main initialization function
+function initAll() {
+    console.log('Initializing website...');
+    
+    // Initialize all components
+    initMobileNavigation();
+    initTouchNavigation();
+    initSmoothScrolling();
+    initActiveNavigation();
+    initNavbarScroll();
+    initScrollProgress();
+    initRegistrationForm();
+    initBackToTopButton();
+    initMobileModalEnhancements();
+    
+    console.log('Website initialization complete');
+}
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', initAll);
