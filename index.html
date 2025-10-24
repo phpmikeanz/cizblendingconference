@@ -266,104 +266,29 @@
                     </div>
                 </div>
                 <div class="registration-form">
-                    <form id="registrationForm">
-                        <div class="form-group">
-                            <label for="localityProvince">Locality and Province *</label>
-                            <input type="text" id="localityProvince" name="localityProvince" placeholder="Example: Isabela, Basilan" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="numberOfRegistrants">Number of Registrants *</label>
-                            <input type="number" id="numberOfRegistrants" name="numberOfRegistrants" min="1" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="englishOutlines">Number of English outlines *</label>
-                            <input type="number" id="englishOutlines" name="englishOutlines" min="0" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="cebuanoOutlines">Number of Cebuano outlines *</label>
-                            <input type="number" id="cebuanoOutlines" name="cebuanoOutlines" min="0" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="joiningFor">Joining for *</label>
-                            <select id="joiningFor" name="joiningFor" required>
-                                <option value="">Select Option</option>
-                                <option value="dec13-14">December 13 & 14</option>
-                                <option value="dec14">December 14</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="packedLunches">Number of packed lunches for December 14 (Lord's day) *</label>
-                            <input type="text" id="packedLunches" name="packedLunches" placeholder="If you won't be availing the packed lunch, please put NONE" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="transportation">Transportation *</label>
-                            <select id="transportation" name="transportation" required>
-                                <option value="">Select Transportation</option>
-                                <option value="commute-bus">Commute (Bus)</option>
-                                <option value="plane">Plane</option>
-                                <option value="own-vehicle">Own vehicle</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group" id="vehicleDetails" style="display: none;">
-                            <label for="vehicleInfo">Vehicle Details</label>
-                            <input type="text" id="vehicleInfo" name="vehicleInfo" placeholder="If own vehicle, kindly indicate the type/model and plate number of vehicle you will be bringing.">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="modeOfPayment">Mode of Payment *</label>
-                            <select id="modeOfPayment" name="modeOfPayment" required>
-                                <option value="">Select Payment Method</option>
-                                <option value="bank-deposit">Bank Deposit</option>
-                                <option value="gcash">Gcash</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="paymentProof">Payment Proof *</label>
-                            <input type="file" id="paymentProof" name="paymentProof" accept="image/*,.pdf" required>
-                            <small>Please attach the copy of deposit slip or screenshot for Gcash payment.</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="arrivalDateTime">Date and Time of Arrival *</label>
-                            <input type="datetime-local" id="arrivalDateTime" name="arrivalDateTime" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="departureDateTime">Date and Time of Departure *</label>
-                            <input type="datetime-local" id="departureDateTime" name="departureDateTime" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="coordinatorName">Name of Coordinator/In-charge *</label>
-                            <input type="text" id="coordinatorName" name="coordinatorName" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="coordinatorContact">Contact Number of Coordinator/In-charge *</label>
-                            <input type="tel" id="coordinatorContact" name="coordinatorContact" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="participantsList">List of Participants (with gender/age) *</label>
-                            <textarea id="participantsList" name="participantsList" rows="6" placeholder="Example:&#10;1. Beryl Jamotillo-Sister/26&#10;2.&#10;3." required></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="additionalNotes">Additional Notes</label>
-                            <textarea id="additionalNotes" name="additionalNotes" rows="3" placeholder="Any additional information or special requirements"></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-full">Register Now</button>
-                    </form>
+                    <div class="form-header">
+                        <h3>Register for the Conference</h3>
+                        <p>Complete your registration using our secure Google Form</p>
+                    </div>
+                    <div class="registration-requirements">
+                        <h4>What to Bring:</h4>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Own blankets</li>
+                            <li><i class="fas fa-check"></i> Bath towels</li>
+                            <li><i class="fas fa-check"></i> Personal medicines</li>
+                            <li><i class="fas fa-check"></i> Toiletries</li>
+                            <li><i class="fas fa-check"></i> Sweater/Jacket for the meeting</li>
+                        </ul>
+                    </div>
+                    <div class="registration-button-container">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSchoB_Gx_uqTfij_Nth9vIDsEWH-JdvEcu9xOUbbHQb9ai01w/viewform?fbclid=IwY2xjawNnziBleHRuA2FlbQIxMABicmlkETF3NXRKdVJGRzY1Wk4xSEZEAR667AOliq19LC5j2toRpQuEIpx1SzwTXLOKasLUx8zhEVSumCxLSNyjGUaJIw_aem_4tG8HWtKiixtB3LoqmSyWQ" 
+                           target="_blank" 
+                           class="btn btn-primary btn-register">
+                            <i class="fas fa-external-link-alt"></i>
+                            Register Now
+                        </a>
+                        <p class="registration-note">Click the button above to open the registration form in a new tab</p>
+                    </div>
                 </div>
             </div>
             
