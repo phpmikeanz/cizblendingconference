@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2c5aa0">
+    <link rel="icon" type="image/png" href="cizz.png">
+    <title>Admin Portal - Conference & Blending</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        // Supabase client configuration (publishable key is safe for public use)
+        window.SUPABASE_URL = 'https://bndsewykiqkhomhholdq.supabase.co';
+        window.SUPABASE_ANON_KEY = 'sb_publishable_eAbjBc4yTSedKYm1EbnyRg_jEsJi0V8';
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.2/dist/umd/supabase.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="cizz.png" alt="Church Logo" class="logo-img">
+                <span>Admin Portal</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Main Site</a></li>
+                <li><a href="#admin-login" class="nav-link">Login</a></li>
+                <li><a href="#admin" class="nav-link">Dashboard</a></li>
+                <li><button class="nav-link btn-nav-registrants" id="btnShowRegistrantsModal" style="background: none; border: none; cursor: pointer; color: inherit; font: inherit;">
+                    <i class="fas fa-users"></i> Registrants
+                </button></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+        <div class="scroll-progress">
+            <div class="scroll-progress-bar"></div>
+        </div>
+    </nav>
+
+    <section class="hero hero-slim">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-logo">
+                <img src="cizz.png" alt="Church Logo" class="hero-logo-img">
+            </div>
+                <div class="badge-row">
+                    <span class="pill-badge"><i class="fas fa-shield-alt"></i> Secure Admin Portal</span>
+                    <span class="pill-badge subtle"><i class="fas fa-cloud"></i> Supabase Powered</span>
+                </div>
+                <h1 class="hero-title">Admin Access</h1>
+                <h2 class="hero-subtitle">Conference &amp; Blending Dashboard</h2>
+                <p class="hero-description">Manage registrants, accommodations, and payments in one place.</p>
+            <div class="hero-buttons">
+                <a href="#admin-login" class="btn btn-primary">Login</a>
+                <a href="index.html" class="btn btn-secondary">Back to Site</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Login Section -->
+    <section id="admin-login" class="admin-login">
+        <div class="container">
+            <div class="section-header">
+                <h2>Admin Access</h2>
+                <p>Sign in to view and manage registrations and accommodations</p>
+            </div>
+            <div class="admin-login-card">
+                <div class="login-content">
+                    <div>
+                        <h3>Secure Admin Portal</h3>
+                        <p class="login-subtext">Enter the admin password to unlock the dashboard.</p>
+                    </div>
+                    <div class="security-highlights">
+                        <span><i class="fas fa-lock"></i> Supabase Auth</span>
+                        <span><i class="fas fa-database"></i> Live Data</span>
+                        <span><i class="fas fa-file-export"></i> CSV Export</span>
+                    </div>
+                    <form id="adminLoginForm" class="login-form">
+                        <div class="form-field">
+                            <label for="adminEmail">Admin Email (optional)</label>
+                            <input type="email" id="adminEmail" name="adminEmail" placeholder="admin@example.com" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="adminPassword">Password</label>
+                            <div class="password-input">
+                                <input type="password" id="adminPassword" name="adminPassword" placeholder="Enter admin password" required>
+                                <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary full-width">Login to Admin</button>
+                        <p class="helper-text">Uses Supabase Auth (email + password)</p>
+                    </form>
+                </div>
+                <div class="login-aside">
+                    <div class="badge">Admin Only</div>
+                    <h4>Why sign in?</h4>
+                    <ul>
+                        <li>View all registrants in one place</li>
+                        <li>Track accommodation needs</li>
+                        <li>Export CSV for reporting</li>
+                        <li>Filter by status, transport, and payment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Panel Section -->
+    <section id="admin" class="admin-panel locked">
+        <div class="container">
+            <div class="section-header">
+                <h2>Admin Panel</h2>
+                <p>Unified view of every registrant, accommodation need, and payment status</p>
+            </div>
+
+            <div class="admin-layout">
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <p class="stat-label">Total Registrants</p>
+                            <h3 id="statTotal">0</h3>
+                            <span class="stat-sub">Across all provinces & cities</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon info">
+                            <i class="fas fa-bed"></i>
+                        </div>
+                        <div>
+                            <p class="stat-label">Needs Accommodation</p>
+                            <h3 id="statAccommodation">0</h3>
+                            <span class="stat-sub">Free or hotel requests</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <p class="stat-label">Pending / Unpaid</p>
+                            <h3 id="statPending">0</h3>
+                            <span class="stat-sub">Follow-up needed</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon accent">
+                            <i class="fas fa-peso-sign"></i>
+                        </div>
+                        <div>
+                            <p class="stat-label">Recorded Amount</p>
+                            <h3 id="statAmount">₱0</h3>
+                            <span class="stat-sub">From current entries</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-controls">
+                    <div class="controls-header">
+                        <div>
+                            <h3>Smart Filters</h3>
+                            <p>Search or filter by accommodation, payment status, and travel</p>
+                        </div>
+                    </div>
+                    <div class="controls-grid">
+                        <div class="control-group full-width">
+                            <label for="adminSearch">Quick search</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="adminSearch" placeholder="Search by name, province, locality/city, status, accommodation, transportation, payment mode, remarks...">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="adminAccommodationFilter">Accommodation</label>
+                            <select id="adminAccommodationFilter">
+                                <option value="all">All</option>
+                                <option value="Free">Free</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="None">None</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="adminStatusFilter">Status</label>
+                            <select id="adminStatusFilter">
+                                <option value="all">All</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Confirmed">Confirmed</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="adminTransportationFilter">Transportation</label>
+                            <select id="adminTransportationFilter">
+                                <option value="all">All</option>
+                                <option value="Bus">Bus</option>
+                                <option value="Van">Van</option>
+                                <option value="Flight">Flight</option>
+                                <option value="Private">Private</option>
+                                <option value="Ferry">Ferry</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="adminOutlineFilter">Outline</label>
+                            <select id="adminOutlineFilter">
+                                <option value="all">All</option>
+                                <option value="English">English</option>
+                                <option value="Cebuano">Cebuano</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-table-card">
+                    <div class="table-card-header">
+                        <div>
+                            <h3>Accommodation & Registration Matrix</h3>
+                            <p id="adminResultCount">Showing 0 of 0 entries</p>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" id="adminNewRegistrant">
+                                <i class="fas fa-user-plus"></i> New Registrant
+                            </button>
+                            <button class="btn btn-secondary" id="adminLogoutTop" style="display:none;">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                            <button class="btn btn-secondary" id="adminImportExcelTop">
+                                <i class="fas fa-file-import"></i> Import Excel
+                            </button>
+                            <button class="btn btn-secondary" id="adminDownloadTemplateTop">
+                                <i class="fas fa-file-arrow-down"></i> Template
+                            </button>
+                            <button class="btn btn-secondary" id="adminPrintViewTop">
+                                <i class="fas fa-print"></i> Print PDF
+                            </button>
+                            <button class="btn btn-primary" id="adminExportCsvTop">
+                                <i class="fas fa-download"></i> Export CSV
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <div class="import-help">
+                            <p><strong>Upload guide:</strong> Use the template to match columns. Accepted: .xlsx or .xls. Required: <em>Name</em>. Optional: Province, City, Age, Bro/Sis, Outline, Accommodation, Registration, Food, Status, Mode of Transportation, Arrival/Departure dates & times, Departure Transpo, Mode of Payment, Amount, Remarks.</p>
+                        </div>
+                        <table class="admin-table" aria-label="Admin registrants table">
+                            <thead>
+                                <tr>
+                                    <th>Actions</th>
+                                    <th>Province</th>
+                                    <th>Locality</th>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Bro/Sis</th>
+                                    <th>Outline</th>
+                                    <th>Accommodation</th>
+                                    <th>Registration</th>
+                                    <th>Food</th>
+                                    <th>Status</th>
+                                    <th>Mode of Transportation</th>
+                                    <th>Arrival Date</th>
+                                    <th>Arrival Time</th>
+                                    <th>Arrival Transpo</th>
+                                    <th>Departure Date</th>
+                                    <th>Departure Time</th>
+                                    <th>Departure Transpo</th>
+                                    <th>Mode of Payment</th>
+                                    <th>Amount</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTableBody">
+                                <tr>
+                                    <td colspan="21" class="empty-row">Loading registrants...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="admin-pagination">
+                        <div class="pagination-info" id="adminPageInfo">Page 1 of 1</div>
+                        <div class="pagination-controls">
+                            <button class="btn btn-secondary" id="adminPagePrev">
+                                <i class="fas fa-chevron-left"></i> Prev
+                            </button>
+                            <button class="btn btn-secondary" id="adminPageNext">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <label class="page-size-label" for="adminPageSize">Rows per page</label>
+                            <select id="adminPageSize">
+                                <option value="10">10</option>
+                                <option value="25" selected>25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="cizz.png" alt="Church Logo" class="footer-logo-img">
+                        <span>The Church in Zamboanga City</span>
+                    </div>
+                    <p>Practicing the church life and building up the Body of Christ in Zamboanga City and throughout the earth.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Main Site</a></li>
+                        <li><a href="#admin-login">Admin Login</a></li>
+                        <li><a href="#admin">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>40M Calixto St. Zone I, Zamboanga City</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>churchinzamboanga@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-user"></i>
+                        <span>Sis. Beryl: +63 906 043 5290</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 The Church in Zamboanga City. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="backToTop" class="back-to-top" onclick="scrollToTop()">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <input type="file" id="adminImportFile" accept=".xlsx,.xls" style="display:none;">
+
+    <!-- Registrant Details Modal -->
+    <div id="registrantModal" class="registrant-modal">
+        <div class="registrant-modal-overlay"></div>
+        <div class="registrant-modal-content">
+            <div class="registrant-modal-header">
+                <h2>Registrant Details</h2>
+                <button class="registrant-modal-close" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="registrant-modal-body" id="registrantModalBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- All Registrants Modal -->
+    <div id="allRegistrantsModal" class="registrant-modal">
+        <div class="registrant-modal-overlay"></div>
+        <div class="registrant-modal-content registrants-list-modal">
+            <div class="registrant-modal-header">
+                <h2><i class="fas fa-users"></i> All Registrants</h2>
+                <button class="registrant-modal-close" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="registrant-modal-body">
+                <div class="registrants-modal-search">
+                    <div class="input-with-icon">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="registrantsModalSearch" placeholder="Search registrants...">
+                    </div>
+                </div>
+                <div class="registrants-modal-table-wrapper">
+                    <table class="registrants-modal-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Locality</th>
+                                <th>Province</th>
+                                <th>Status</th>
+                                <th>Accommodation</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allRegistrantsModalBody">
+                            <tr>
+                                <td colspan="6" class="empty-row">Loading registrants...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Registrant Modal -->
+    <div id="newRegistrantModal" class="registrant-modal">
+        <div class="registrant-modal-overlay"></div>
+        <div class="registrant-modal-content new-registrant-modal">
+            <div class="registrant-modal-header">
+                <h2><i class="fas fa-user-plus"></i> Add New Registrant</h2>
+                <button class="registrant-modal-close" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="registrant-modal-body">
+                <form id="newRegistrantForm" class="new-registrant-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="newName">Name <span class="required">*</span></label>
+                            <input type="text" id="newName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newAge">Age</label>
+                            <input type="number" id="newAge" name="age" min="1" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label for="newBrethren">Bro/Sis</label>
+                            <select id="newBrethren" name="brethren">
+                                <option value="">Select...</option>
+                                <option value="Brother">Brother</option>
+                                <option value="Sister">Sister</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newProvince">Province</label>
+                            <input type="text" id="newProvince" name="province">
+                        </div>
+                        <div class="form-group">
+                            <label for="newCity">Locality</label>
+                            <input type="text" id="newCity" name="city">
+                        </div>
+                        <div class="form-group">
+                            <label for="newOutline">Outline</label>
+                            <select id="newOutline" name="outline">
+                                <option value="">Select...</option>
+                                <option value="English">English</option>
+                                <option value="Cebuano">Cebuano</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newAccommodation">Accommodation</label>
+                            <select id="newAccommodation" name="accommodation">
+                                <option value="">Select...</option>
+                                <option value="Free">Free</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="None">None</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newRegistration">Registration</label>
+                            <input type="text" id="newRegistration" name="registration">
+                        </div>
+                        <div class="form-group">
+                            <label for="newFood">Food</label>
+                            <select id="newFood" name="food">
+                                <option value="">Select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newStatus">Status</label>
+                            <select id="newStatus" name="status">
+                                <option value="">Select...</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Confirmed">Confirmed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newTransportation">Mode of Transportation</label>
+                            <select id="newTransportation" name="transportation">
+                                <option value="">Select...</option>
+                                <option value="Bus">Bus</option>
+                                <option value="Van">Van</option>
+                                <option value="Flight">Flight</option>
+                                <option value="Private">Private</option>
+                                <option value="Ferry">Ferry</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newArrivalDate">Arrival Date</label>
+                            <input type="date" id="newArrivalDate" name="arrivalDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="newArrivalTime">Arrival Time</label>
+                            <input type="text" id="newArrivalTime" name="arrivalTime" placeholder="e.g., 1:00:00 PM">
+                        </div>
+                        <div class="form-group">
+                            <label for="newArrivalTranspo">Arrival Transpo</label>
+                            <input type="text" id="newArrivalTranspo" name="arrivalTranspo">
+                        </div>
+                        <div class="form-group">
+                            <label for="newDepartureDate">Departure Date</label>
+                            <input type="date" id="newDepartureDate" name="departureDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="newDepartureTime">Departure Time</label>
+                            <input type="text" id="newDepartureTime" name="departureTime" placeholder="e.g., 1:00:00 PM">
+                        </div>
+                        <div class="form-group">
+                            <label for="newDepartureTranspo">Departure Transpo</label>
+                            <input type="text" id="newDepartureTranspo" name="departureTranspo">
+                        </div>
+                        <div class="form-group">
+                            <label for="newPaymentMode">Mode of Payment</label>
+                            <input type="text" id="newPaymentMode" name="paymentMode">
+                        </div>
+                        <div class="form-group">
+                            <label for="newAmount">Amount</label>
+                            <input type="number" id="newAmount" name="amount" step="0.01" min="0">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="newRemarks">Remarks</label>
+                            <textarea id="newRemarks" name="remarks" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelNewRegistrant">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Registrant
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Options Modal -->
+    <div id="printOptionsModal" class="registrant-modal">
+        <div class="registrant-modal-overlay"></div>
+        <div class="registrant-modal-content print-options-modal">
+            <div class="registrant-modal-header">
+                <h2><i class="fas fa-print"></i> Print Options</h2>
+                <button class="registrant-modal-close" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="registrant-modal-body">
+                <form id="printOptionsForm" class="print-options-form">
+                    <div class="form-group">
+                        <label for="printProvinceFilter">Filter by Province</label>
+                        <select id="printProvinceFilter" name="province">
+                            <option value="all">All Provinces</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="printCityFilter">Filter by City/Locality</label>
+                        <select id="printCityFilter" name="city">
+                            <option value="all">All Cities/Localities</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="printGroupByProvince" name="groupByProvince">
+                            Group by Province
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="printGroupByCity" name="groupByCity">
+                            Group by City/Locality
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelPrintOptions">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-print"></i> Print PDF
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
