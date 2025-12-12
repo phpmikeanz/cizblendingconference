@@ -838,7 +838,7 @@ async function fetchAdminRegistrants() {
     if (tbody) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="22" class="empty-row">Loading registrants from Supabase...</td>
+                <td colspan="23" class="empty-row">Loading registrants from Supabase...</td>
             </tr>
         `;
     }
@@ -1740,7 +1740,7 @@ function renderAdminTable(rows) {
     if (!rows.length) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="22" class="empty-row">No registrants match the current filters.</td>
+                <td colspan="23" class="empty-row">No registrants match the current filters.</td>
             </tr>
         `;
         return;
@@ -1760,6 +1760,7 @@ function renderAdminTable(rows) {
             });
         }
         return `<tr>
+            <td style="width: 30px; min-width: 30px; padding: 0.75rem; display: table-cell !important; visibility: visible !important;"></td>
             <td data-column="number" style="text-align: center; font-weight: 600; color: #64748b; width: 50px; min-width: 50px; padding: 0.75rem; display: table-cell !important; visibility: visible !important;">${rowNumber}</td>
             <td class="action-cell" data-column="actions" style="width: 90px; min-width: 90px; padding: 0.75rem; text-align: center; display: table-cell !important; visibility: visible !important;">
                 <div class="action-buttons" style="display: flex; gap: 0.5rem; align-items: center; justify-content: center;">
