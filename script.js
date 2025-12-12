@@ -1744,7 +1744,7 @@ function renderAdminTable(rows) {
         const rowData = encodeURIComponent(JSON.stringify(row));
         return `
         <tr>
-            <!-- Column 1: Actions [FORCED] -->
+            <!-- Column 0: Actions -->
             <td class="action-cell">
                 <div class="action-buttons">
                     <button class="btn-view-details" data-row-data="${rowData}" aria-label="View details" title="View Details">
@@ -1755,43 +1755,43 @@ function renderAdminTable(rows) {
                     </button>
                 </div>
             </td>
-            <!-- Column 2: Province -->
+            <!-- Column 1: Province -->
             <td class="province-cell">${safeText(row.province)}</td>
-            <!-- Column 3: City -->
+            <!-- Column 2: City -->
             <td class="city-cell">${safeText(row.city)}</td>
-            <!-- Column 4: Name -->
+            <!-- Column 3: Name -->
             <td class="name-cell">${safeText(row.name)}</td>
-            <!-- Column 5: Age -->
+            <!-- Column 4: Age -->
             <td>${safeText(row.age)}</td>
-            <!-- Column 6: Bro/Sis -->
+            <!-- Column 5: Bro/Sis -->
             <td><span class="chip chip-quiet">${safeText(row.brethren)}</span></td>
-            <!-- Column 7: Outline -->
+            <!-- Column 6: Outline -->
             <td>${safeText(row.outline)}</td>
-            <!-- Column 8: Accommodation -->
+            <!-- Column 7: Accommodation -->
             <td><span class="chip ${row.accommodation === 'None' ? 'chip-muted' : 'chip-primary'}">${safeText(row.accommodation)}</span></td>
-            <!-- Column 9: Registration -->
+            <!-- Column 8: Registration -->
             <td>${safeText(row.registration)}</td>
-            <!-- Column 10: Food -->
+            <!-- Column 9: Food -->
             <td>${safeText(row.food)}</td>
-            <!-- Column 11: Status -->
+            <!-- Column 10: Status -->
             <td><span class="status-badge status-${safeText(row.status).toLowerCase()}">${safeText(row.status)}</span></td>
-            <!-- Column 12: Mode of Transportation -->
+            <!-- Column 11: Mode of Transportation -->
             <td>${safeText(row.transportation)}</td>
-            <!-- Column 13: Arrival Date -->
+            <!-- Column 12: Arrival Date -->
             <td>${formatAdminDate(row.arrivalDate)}</td>
-            <!-- Column 14: Arrival Time -->
+            <!-- Column 13: Arrival Time -->
             <td>${safeText(row.arrivalTime)}</td>
-            <!-- Column 15: Departure Date -->
+            <!-- Column 14: Departure Date -->
             <td>${formatAdminDate(row.departureDate)}</td>
-            <!-- Column 16: Departure Time -->
+            <!-- Column 15: Departure Time -->
             <td>${safeText(row.departureTime)}</td>
-            <!-- Column 17: Departure Transpo -->
+            <!-- Column 16: Departure Transpo -->
             <td>${safeText(row.departureTranspo)}</td>
-            <!-- Column 18: Mode of Payment -->
+            <!-- Column 17: Mode of Payment -->
             <td>${safeText(row.paymentMode)}</td>
-            <!-- Column 19: Amount -->
+            <!-- Column 18: Amount -->
             <td class="amount-cell">${formatAdminAmount(row.amount)}</td>
-            <!-- Column 20: Remarks -->
+            <!-- Column 19: Remarks -->
             <td class="remarks-cell">${safeText(row.remarks)}</td>
         </tr>
     `;
