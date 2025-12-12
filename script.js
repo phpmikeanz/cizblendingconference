@@ -1762,12 +1762,12 @@ function renderAdminTable(rows) {
         return `<tr>
             <td style="width: 30px; min-width: 30px; padding: 0.75rem; display: table-cell !important; visibility: visible !important;"></td>
             <td data-column="number" style="text-align: center; font-weight: 600; color: #64748b; width: 50px; min-width: 50px; padding: 0.75rem; display: table-cell !important; visibility: visible !important;">${rowNumber}</td>
-            <td class="action-cell" data-column="actions" style="width: 90px; min-width: 90px; padding: 0.75rem; text-align: center; display: table-cell !important; visibility: visible !important;">
-                <div class="action-buttons" style="display: flex; gap: 0.5rem; align-items: center; justify-content: center;">
-                    <button class="btn-view-details" data-row-data="${rowData}" aria-label="View details" title="View Details">
+            <td class="action-cell" data-column="actions" style="width: 90px !important; min-width: 90px !important; max-width: 90px !important; padding: 0.75rem !important; text-align: center !important; display: table-cell !important; visibility: visible !important; opacity: 1 !important; position: relative !important; background: transparent !important;">
+                <div class="action-buttons" style="display: flex !important; gap: 0.5rem !important; align-items: center !important; justify-content: center !important; width: 100% !important; flex-wrap: nowrap !important;">
+                    <button class="btn-view-details" data-row-data="${rowData}" aria-label="View details" title="View Details" style="display: inline-flex !important; visibility: visible !important; opacity: 1 !important;">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="btn-edit-registrant" data-row-data="${rowData}" aria-label="Edit registrant" title="Edit">
+                    <button class="btn-edit-registrant" data-row-data="${rowData}" aria-label="Edit registrant" title="Edit" style="display: inline-flex !important; visibility: visible !important; opacity: 1 !important;">
                         <i class="fas fa-edit"></i>
                     </button>
                 </div>
