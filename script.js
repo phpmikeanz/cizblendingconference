@@ -838,7 +838,7 @@ async function fetchAdminRegistrants() {
     if (tbody) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="21" class="empty-row">Loading registrants from Supabase...</td>
+                <td colspan="20" class="empty-row">Loading registrants from Supabase...</td>
             </tr>
         `;
     }
@@ -1728,7 +1728,7 @@ function renderAdminTable(rows) {
     if (!rows.length) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="21" class="empty-row">No registrants match the current filters.</td>
+                <td colspan="20" class="empty-row">No registrants match the current filters.</td>
             </tr>
         `;
         return;
@@ -1738,6 +1738,7 @@ function renderAdminTable(rows) {
         const rowData = encodeURIComponent(JSON.stringify(row));
         return `
         <tr>
+            <!-- Column 1: Actions [FORCED] -->
             <td class="action-cell">
                 <div class="action-buttons">
                     <button class="btn-view-details" data-row-data="${rowData}" aria-label="View details" title="View Details">
@@ -1748,26 +1749,44 @@ function renderAdminTable(rows) {
                     </button>
                 </div>
             </td>
-            <td>${safeText(row.province)}</td>
-            <td>${safeText(row.city)}</td>
-            <td>${safeText(row.name)}</td>
+            <!-- Column 2: Province -->
+            <td class="province-cell">${safeText(row.province)}</td>
+            <!-- Column 3: City -->
+            <td class="city-cell">${safeText(row.city)}</td>
+            <!-- Column 4: Name -->
+            <td class="name-cell">${safeText(row.name)}</td>
+            <!-- Column 5: Age -->
             <td>${safeText(row.age)}</td>
+            <!-- Column 6: Bro/Sis -->
             <td><span class="chip chip-quiet">${safeText(row.brethren)}</span></td>
+            <!-- Column 7: Outline -->
             <td>${safeText(row.outline)}</td>
+            <!-- Column 8: Accommodation -->
             <td><span class="chip ${row.accommodation === 'None' ? 'chip-muted' : 'chip-primary'}">${safeText(row.accommodation)}</span></td>
+            <!-- Column 9: Registration -->
             <td>${safeText(row.registration)}</td>
+            <!-- Column 10: Food -->
             <td>${safeText(row.food)}</td>
+            <!-- Column 11: Status -->
             <td><span class="status-badge status-${safeText(row.status).toLowerCase()}">${safeText(row.status)}</span></td>
+            <!-- Column 12: Mode of Transportation -->
             <td>${safeText(row.transportation)}</td>
+            <!-- Column 13: Arrival Date -->
             <td>${formatAdminDate(row.arrivalDate)}</td>
+            <!-- Column 14: Arrival Time -->
             <td>${safeText(row.arrivalTime)}</td>
-            <td>${safeText(row.arrivalTranspo)}</td>
+            <!-- Column 15: Departure Date -->
             <td>${formatAdminDate(row.departureDate)}</td>
+            <!-- Column 16: Departure Time -->
             <td>${safeText(row.departureTime)}</td>
+            <!-- Column 17: Departure Transpo -->
             <td>${safeText(row.departureTranspo)}</td>
+            <!-- Column 18: Mode of Payment -->
             <td>${safeText(row.paymentMode)}</td>
-            <td>${formatAdminAmount(row.amount)}</td>
-            <td>${safeText(row.remarks)}</td>
+            <!-- Column 19: Amount -->
+            <td class="amount-cell">${formatAdminAmount(row.amount)}</td>
+            <!-- Column 20: Remarks -->
+            <td class="remarks-cell">${safeText(row.remarks)}</td>
         </tr>
     `;
     };
@@ -2842,23 +2861,71 @@ async function handleEditRegistrantSubmit(e) {
     showImportLoader('Updating registrant...');
     
     try {
-        const { data: sessionData } = await supabaseClient.auth.getSession();
+        // Check authentication
+        const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+        if (sessionError) {
+            console.error('Session error:', sessionError);
+        }
+        
         if (!sessionData?.session) {
             showNotification('Your session expired. Please log in again.', 'error');
+            hideImportLoader();
             return;
         }
+        
+        console.log('User authenticated:', sessionData.session.user.email);
+        console.log('Updating registrant with ID:', registrantId);
+        console.log('Update payload:', payload);
 
-        const { error } = await supabaseClient
+        // Attempt the update
+        const { data, error } = await supabaseClient
             .from('registrants')
             .update(payload)
-            .eq('id', registrantId);
+            .eq('id', registrantId)
+            .select();
         
         if (error) {
             console.error('Supabase update error:', error);
-            const msg = error?.message ? `Failed to update registrant: ${error.message}` : 'Failed to update registrant. Please try again.';
-            showNotification(msg, 'error');
+            console.error('Error code:', error.code);
+            console.error('Error details:', error.details);
+            console.error('Error hint:', error.hint);
+            
+            // Provide more specific error messages
+            let errorMsg = 'Failed to update registrant. ';
+            if (error.code === 'PGRST116' || error.message?.includes('permission') || error.message?.includes('policy')) {
+                errorMsg += 'Row Level Security (RLS) policy is blocking the update. Please ensure your Supabase RLS policies allow authenticated users to update registrants.';
+            } else if (error.message) {
+                errorMsg += error.message;
+            } else {
+                errorMsg += 'Please try again.';
+            }
+            
+            showNotification(errorMsg, 'error');
+            hideImportLoader();
             return;
         }
+
+        if (!data || data.length === 0) {
+            console.error('Update succeeded but no rows were affected. ID:', registrantId);
+            console.error('This usually means RLS (Row Level Security) is blocking the update.');
+            
+            // Try to fetch the record to see if it exists
+            const { data: checkData } = await supabaseClient
+                .from('registrants')
+                .select('id')
+                .eq('id', registrantId)
+                .single();
+            
+            if (checkData) {
+                showNotification('Update failed: Row Level Security (RLS) policy is blocking updates. Please check your Supabase RLS policies to allow authenticated users to update the registrants table.', 'error');
+            } else {
+                showNotification('Update failed: Registrant not found. Please refresh the page and try again.', 'error');
+            }
+            hideImportLoader();
+            return;
+        }
+
+        console.log('Successfully updated registrant:', data[0]);
 
         // Refresh data
         adminRegistrants = await fetchAdminRegistrants();

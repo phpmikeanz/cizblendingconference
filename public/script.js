@@ -838,7 +838,7 @@ async function fetchAdminRegistrants() {
     if (tbody) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="21" class="empty-row">Loading registrants from Supabase...</td>
+                <td colspan="22" class="empty-row">Loading registrants from Supabase...</td>
             </tr>
         `;
     }
@@ -877,42 +877,28 @@ async function fetchAdminRegistrants() {
 
     console.log(`Fetched ${allData.length} total registrants from database`);
 
-    // Debug: Log first row to check column mapping
-    if (allData.length > 0) {
-        console.log('Sample row from Supabase:', {
-            id: allData[0].id,
-            province: allData[0].province,
-            city: allData[0].city,
-            name: allData[0].name,
-            age: allData[0].age,
-            allKeys: Object.keys(allData[0])
-        });
-    }
-
     return allData.map(row => ({
         id: row.id, // Include ID for updates
-        // Table column alignment (after Actions column):
-        // Actions column is rendered separately with buttons in renderAdminTable
-        province: row.province ? String(row.province).trim() : null,        // Column: Province
-        city: row.city ? String(row.city).trim() : null,                    // Column: Locality
-        name: row.name ? String(row.name).trim() : null,                    // Column: Name
-        age: row.age,                                                        // Column: Age
-        brethren: row.brethren ? String(row.brethren).trim() : null,          // Column: Bro/Sis
-        outline: row.outline ? String(row.outline).trim() : null,            // Column: Outline
-        accommodation: row.accommodation ? String(row.accommodation).trim() : null, // Column: Accommodation
-        registration: row.registration ? String(row.registration).trim() : null,    // Column: Registration
-        food: row.food ? String(row.food).trim() : null,                    // Column: Food
-        status: row.status ? String(row.status).trim() : null,              // Column: Status
-        transportation: row.transportation ? String(row.transportation).trim() : null, // Column: Mode of Transportation
-        arrivalDate: row.arrival_date,                                       // Column: Arrival Date
-        arrivalTime: row.arrival_time ? String(row.arrival_time).trim() : null, // Column: Arrival Time
-        arrivalTranspo: row.arrival_transpo ? String(row.arrival_transpo).trim() : null, // Column: Arrival Transpo
-        departureDate: row.departure_date,                                   // Column: Departure Date
-        departureTime: row.departure_time ? String(row.departure_time).trim() : null, // Column: Departure Time
-        departureTranspo: row.departure_transpo ? String(row.departure_transpo).trim() : null, // Column: Departure Transpo
-        paymentMode: row.payment_mode ? String(row.payment_mode).trim() : null, // Column: Mode of Payment
-        amount: row.amount,                                                  // Column: Amount
-        remarks: row.remarks ? String(row.remarks).trim() : null             // Column: Remarks
+        province: row.province ? String(row.province).trim() : null,
+        city: row.city ? String(row.city).trim() : null,
+        name: row.name ? String(row.name).trim() : null,
+        age: row.age,
+        brethren: row.brethren ? String(row.brethren).trim() : null,
+        outline: row.outline ? String(row.outline).trim() : null,
+        accommodation: row.accommodation ? String(row.accommodation).trim() : null,
+        registration: row.registration ? String(row.registration).trim() : null,
+        food: row.food ? String(row.food).trim() : null,
+        status: row.status ? String(row.status).trim() : null,
+        transportation: row.transportation ? String(row.transportation).trim() : null,
+        arrivalDate: row.arrival_date,
+        arrivalTime: row.arrival_time ? String(row.arrival_time).trim() : null,
+        arrivalTranspo: row.arrival_transpo ? String(row.arrival_transpo).trim() : null,
+        departureDate: row.departure_date,
+        departureTime: row.departure_time ? String(row.departure_time).trim() : null,
+        departureTranspo: row.departure_transpo ? String(row.departure_transpo).trim() : null,
+        paymentMode: row.payment_mode ? String(row.payment_mode).trim() : null,
+        amount: row.amount,
+        remarks: row.remarks ? String(row.remarks).trim() : null
     }));
 }
 
@@ -1742,38 +1728,31 @@ function renderAdminTable(rows) {
     if (!rows.length) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="21" class="empty-row">No registrants match the current filters.</td>
+                <td colspan="22" class="empty-row">No registrants match the current filters.</td>
             </tr>
         `;
         return;
     }
 
-    const buildRow = (row, index) => {
+    const buildRow = (row) => {
         const rowData = encodeURIComponent(JSON.stringify(row));
-        // Debug: Log what we're about to render for first row
-        if (index === 0) {
-            console.log('Building first row with data:', {
-                province: row.province,
-                city: row.city,
-                name: row.name,
-                age: row.age
-            });
-        }
-        return `<tr>
-            <td class="action-cell" data-column="actions" style="width: 90px !important; min-width: 90px !important; max-width: 90px !important; padding: 0.75rem !important; text-align: center !important; display: table-cell !important; visibility: visible !important; opacity: 1 !important; position: relative !important; background: transparent !important;">
-                <div class="action-buttons" style="display: flex !important; gap: 0.5rem !important; align-items: center !important; justify-content: center !important; width: 100% !important; flex-wrap: nowrap !important;">
-                    <button class="btn-view-details" data-row-data="${rowData}" aria-label="View details" title="View Details" style="display: inline-flex !important; visibility: visible !important; opacity: 1 !important;">
+        return `
+        <tr>
+            <td></td>
+            <td class="action-cell">
+                <div class="action-buttons">
+                    <button class="btn-view-details" data-row-data="${rowData}" aria-label="View details" title="View Details">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="btn-edit-registrant" data-row-data="${rowData}" aria-label="Edit registrant" title="Edit" style="display: inline-flex !important; visibility: visible !important; opacity: 1 !important;">
+                    <button class="btn-edit-registrant" data-row-data="${rowData}" aria-label="Edit registrant" title="Edit">
                         <i class="fas fa-edit"></i>
                     </button>
                 </div>
             </td>
-            <td class="province-cell" data-column="province">${safeText(row.province)}</td>
-            <td data-column="city">${safeText(row.city)}</td>
-            <td data-column="name">${safeText(row.name)}</td>
-            <td data-column="age">${safeText(row.age)}</td>
+            <td>${safeText(row.province)}</td>
+            <td>${safeText(row.city)}</td>
+            <td>${safeText(row.name)}</td>
+            <td>${safeText(row.age)}</td>
             <td><span class="chip chip-quiet">${safeText(row.brethren)}</span></td>
             <td>${safeText(row.outline)}</td>
             <td><span class="chip ${row.accommodation === 'None' ? 'chip-muted' : 'chip-primary'}">${safeText(row.accommodation)}</span></td>
@@ -1789,41 +1768,12 @@ function renderAdminTable(rows) {
             <td>${safeText(row.departureTranspo)}</td>
             <td>${safeText(row.paymentMode)}</td>
             <td>${formatAdminAmount(row.amount)}</td>
-            <td style="max-width: 200px; word-wrap: break-word; overflow-wrap: break-word;">${safeText(row.remarks)}</td>
-        </tr>`;
+            <td>${safeText(row.remarks)}</td>
+        </tr>
+    `;
     };
 
-    // Clear and rebuild table row by row to ensure proper structure
-    tbody.innerHTML = '';
-    const rowsHtml = rows.map((row, index) => buildRow(row, index));
-    tbody.innerHTML = rowsHtml.join('');
-    
-    // Debug: Verify column alignment
-    if (rows.length > 0) {
-        const firstRow = rows[0];
-        const firstTr = tbody.querySelector('tr');
-        const headerRow = document.querySelector('.admin-table thead tr');
-        if (firstTr && headerRow) {
-            const headerCells = headerRow.querySelectorAll('th');
-            const bodyCells = firstTr.querySelectorAll('td');
-            console.log('Column alignment check:', {
-                headerCount: headerCells.length,
-                bodyCount: bodyCells.length,
-                headers: Array.from(headerCells).map(th => th.textContent.trim()),
-                bodyCells: Array.from(bodyCells).slice(0, 6).map((td, i) => ({
-                    index: i,
-                    content: td.textContent.trim().substring(0, 30),
-                    hasButtons: td.querySelector('.action-buttons') !== null
-                })),
-                expectedData: {
-                    province: firstRow.province,
-                    city: firstRow.city,
-                    name: firstRow.name,
-                    age: firstRow.age
-                }
-            });
-        }
-    }
+    tbody.innerHTML = rows.map(buildRow).join('');
     
     // Attach click handlers to view buttons
     tbody.querySelectorAll('.btn-view-details').forEach(btn => {
@@ -2893,23 +2843,71 @@ async function handleEditRegistrantSubmit(e) {
     showImportLoader('Updating registrant...');
     
     try {
-        const { data: sessionData } = await supabaseClient.auth.getSession();
+        // Check authentication
+        const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+        if (sessionError) {
+            console.error('Session error:', sessionError);
+        }
+        
         if (!sessionData?.session) {
             showNotification('Your session expired. Please log in again.', 'error');
+            hideImportLoader();
             return;
         }
+        
+        console.log('User authenticated:', sessionData.session.user.email);
+        console.log('Updating registrant with ID:', registrantId);
+        console.log('Update payload:', payload);
 
-        const { error } = await supabaseClient
+        // Attempt the update
+        const { data, error } = await supabaseClient
             .from('registrants')
             .update(payload)
-            .eq('id', registrantId);
+            .eq('id', registrantId)
+            .select();
         
         if (error) {
             console.error('Supabase update error:', error);
-            const msg = error?.message ? `Failed to update registrant: ${error.message}` : 'Failed to update registrant. Please try again.';
-            showNotification(msg, 'error');
+            console.error('Error code:', error.code);
+            console.error('Error details:', error.details);
+            console.error('Error hint:', error.hint);
+            
+            // Provide more specific error messages
+            let errorMsg = 'Failed to update registrant. ';
+            if (error.code === 'PGRST116' || error.message?.includes('permission') || error.message?.includes('policy')) {
+                errorMsg += 'Row Level Security (RLS) policy is blocking the update. Please ensure your Supabase RLS policies allow authenticated users to update registrants.';
+            } else if (error.message) {
+                errorMsg += error.message;
+            } else {
+                errorMsg += 'Please try again.';
+            }
+            
+            showNotification(errorMsg, 'error');
+            hideImportLoader();
             return;
         }
+
+        if (!data || data.length === 0) {
+            console.error('Update succeeded but no rows were affected. ID:', registrantId);
+            console.error('This usually means RLS (Row Level Security) is blocking the update.');
+            
+            // Try to fetch the record to see if it exists
+            const { data: checkData } = await supabaseClient
+                .from('registrants')
+                .select('id')
+                .eq('id', registrantId)
+                .single();
+            
+            if (checkData) {
+                showNotification('Update failed: Row Level Security (RLS) policy is blocking updates. Please check your Supabase RLS policies to allow authenticated users to update the registrants table.', 'error');
+            } else {
+                showNotification('Update failed: Registrant not found. Please refresh the page and try again.', 'error');
+            }
+            hideImportLoader();
+            return;
+        }
+
+        console.log('Successfully updated registrant:', data[0]);
 
         // Refresh data
         adminRegistrants = await fetchAdminRegistrants();

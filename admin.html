@@ -7,15 +7,15 @@
     <link rel="icon" type="image/png" href="cizz.png">
     <title>Admin Portal - Conference & Blending</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script>
         // Supabase client configuration (publishable key is safe for public use)
         window.SUPABASE_URL = 'https://bndsewykiqkhomhholdq.supabase.co';
         window.SUPABASE_ANON_KEY = 'sb_publishable_eAbjBc4yTSedKYm1EbnyRg_jEsJi0V8';
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.2/dist/umd/supabase.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.2/dist/umd/supabase.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -255,11 +255,10 @@
                         <table class="admin-table" aria-label="Admin registrants table">
                             <thead>
                                 <tr>
-                                    <th></th>
-                                    <th>Action</th>
+                                    <th>+</th>
+                                    <th>Actions</th>
                                     <th>Province</th>
-                                    <th>Province</th>
-                                    <th>Locality</th>
+                                    <th>City</th>
                                     <th>Name</th>
                                     <th>Age</th>
                                     <th>Bro/Sis</th>
@@ -271,7 +270,6 @@
                                     <th>Mode of Transportation</th>
                                     <th>Arrival Date</th>
                                     <th>Arrival Time</th>
-                                    <th>Arrival Transpo</th>
                                     <th>Departure Date</th>
                                     <th>Departure Time</th>
                                     <th>Departure Transpo</th>
@@ -282,7 +280,7 @@
                             </thead>
                             <tbody id="adminTableBody">
                                 <tr>
-                                    <td colspan="21" class="empty-row">Loading registrants...</td>
+                                    <td colspan="20" class="empty-row">Loading registrants...</td>
                                 </tr>
                             </tbody>
                         </table>
