@@ -255,6 +255,7 @@
                         <table class="admin-table" aria-label="Admin registrants table">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Actions</th>
                                     <th>Province</th>
                                     <th>Locality</th>
@@ -280,7 +281,7 @@
                             </thead>
                             <tbody id="adminTableBody">
                                 <tr>
-                                    <td colspan="21" class="empty-row">Loading registrants...</td>
+                                    <td colspan="22" class="empty-row">Loading registrants...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -537,6 +538,141 @@
                         <button type="button" class="btn btn-secondary" id="cancelNewRegistrant">Cancel</button>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Save Registrant
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Registrant Modal -->
+    <div id="editRegistrantModal" class="registrant-modal">
+        <div class="registrant-modal-overlay"></div>
+        <div class="registrant-modal-content new-registrant-modal">
+            <div class="registrant-modal-header">
+                <h2><i class="fas fa-edit"></i> Edit Registrant</h2>
+                <button class="registrant-modal-close" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="registrant-modal-body">
+                <form id="editRegistrantForm" class="new-registrant-form">
+                    <input type="hidden" id="editRegistrantId" name="id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="editName">Name <span class="required">*</span></label>
+                            <input type="text" id="editName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editAge">Age</label>
+                            <input type="number" id="editAge" name="age" min="1" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label for="editBrethren">Bro/Sis</label>
+                            <select id="editBrethren" name="brethren">
+                                <option value="">Select...</option>
+                                <option value="Brother">Brother</option>
+                                <option value="Sister">Sister</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editProvince">Province</label>
+                            <input type="text" id="editProvince" name="province">
+                        </div>
+                        <div class="form-group">
+                            <label for="editCity">Locality</label>
+                            <input type="text" id="editCity" name="city">
+                        </div>
+                        <div class="form-group">
+                            <label for="editOutline">Outline</label>
+                            <select id="editOutline" name="outline">
+                                <option value="">Select...</option>
+                                <option value="English">English</option>
+                                <option value="Cebuano">Cebuano</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editAccommodation">Accommodation</label>
+                            <select id="editAccommodation" name="accommodation">
+                                <option value="">Select...</option>
+                                <option value="Free">Free</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="None">None</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editRegistration">Registration</label>
+                            <input type="text" id="editRegistration" name="registration">
+                        </div>
+                        <div class="form-group">
+                            <label for="editFood">Food</label>
+                            <select id="editFood" name="food">
+                                <option value="">Select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editStatus">Status</label>
+                            <select id="editStatus" name="status">
+                                <option value="">Select...</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Confirmed">Confirmed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editTransportation">Mode of Transportation</label>
+                            <select id="editTransportation" name="transportation">
+                                <option value="">Select...</option>
+                                <option value="Bus">Bus</option>
+                                <option value="Van">Van</option>
+                                <option value="Flight">Flight</option>
+                                <option value="Private">Private</option>
+                                <option value="Ferry">Ferry</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editArrivalDate">Arrival Date</label>
+                            <input type="date" id="editArrivalDate" name="arrivalDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="editArrivalTime">Arrival Time</label>
+                            <input type="text" id="editArrivalTime" name="arrivalTime" placeholder="e.g., 1:00:00 PM">
+                        </div>
+                        <div class="form-group">
+                            <label for="editArrivalTranspo">Arrival Transpo</label>
+                            <input type="text" id="editArrivalTranspo" name="arrivalTranspo">
+                        </div>
+                        <div class="form-group">
+                            <label for="editDepartureDate">Departure Date</label>
+                            <input type="date" id="editDepartureDate" name="departureDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="editDepartureTime">Departure Time</label>
+                            <input type="text" id="editDepartureTime" name="departureTime" placeholder="e.g., 1:00:00 PM">
+                        </div>
+                        <div class="form-group">
+                            <label for="editDepartureTranspo">Departure Transpo</label>
+                            <input type="text" id="editDepartureTranspo" name="departureTranspo">
+                        </div>
+                        <div class="form-group">
+                            <label for="editPaymentMode">Mode of Payment</label>
+                            <input type="text" id="editPaymentMode" name="paymentMode">
+                        </div>
+                        <div class="form-group">
+                            <label for="editAmount">Amount</label>
+                            <input type="number" id="editAmount" name="amount" step="0.01" min="0">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="editRemarks">Remarks</label>
+                            <textarea id="editRemarks" name="remarks" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelEditRegistrant">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Registrant
                         </button>
                     </div>
                 </form>

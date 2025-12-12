@@ -838,7 +838,7 @@ async function fetchAdminRegistrants() {
     if (tbody) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="21" class="empty-row">Loading registrants from Supabase...</td>
+                <td colspan="22" class="empty-row">Loading registrants from Supabase...</td>
             </tr>
         `;
     }
@@ -877,7 +877,20 @@ async function fetchAdminRegistrants() {
 
     console.log(`Fetched ${allData.length} total registrants from database`);
 
+    // Debug: Log first row to check column mapping
+    if (allData.length > 0) {
+        console.log('Sample row from Supabase:', {
+            id: allData[0].id,
+            province: allData[0].province,
+            city: allData[0].city,
+            name: allData[0].name,
+            age: allData[0].age,
+            allKeys: Object.keys(allData[0])
+        });
+    }
+
     return allData.map(row => ({
+        id: row.id, // Include ID for updates
         province: row.province ? String(row.province).trim() : null,
         city: row.city ? String(row.city).trim() : null,
         name: row.name ? String(row.name).trim() : null,
@@ -1727,25 +1740,41 @@ function renderAdminTable(rows) {
     if (!rows.length) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="21" class="empty-row">No registrants match the current filters.</td>
+                <td colspan="22" class="empty-row">No registrants match the current filters.</td>
             </tr>
         `;
         return;
     }
 
-    const buildRow = (row) => {
+    const buildRow = (row, index, startNumber = 1) => {
         const rowData = encodeURIComponent(JSON.stringify(row));
-        return `
-        <tr>
-            <td class="action-cell">
-                <button class="btn-view-details" data-row-data="${rowData}" aria-label="View details">
-                    <i class="fas fa-plus"></i>
-                </button>
+        const rowNumber = startNumber + index;
+        // Debug: Log what we're about to render for first row
+        if (index === 0) {
+            console.log('Building first row with data:', {
+                rowNumber: rowNumber,
+                province: row.province,
+                city: row.city,
+                name: row.name,
+                age: row.age
+            });
+        }
+        return `<tr>
+            <td data-column="number" style="text-align: center; font-weight: 600; color: #64748b; width: 50px; min-width: 50px; padding: 0.75rem; display: table-cell !important; visibility: visible !important;">${rowNumber}</td>
+            <td class="action-cell" data-column="actions" style="width: 90px; min-width: 90px; padding: 0.75rem; text-align: center; display: table-cell !important; visibility: visible !important;">
+                <div class="action-buttons" style="display: flex; gap: 0.5rem; align-items: center; justify-content: center;">
+                    <button class="btn-view-details" data-row-data="${rowData}" aria-label="View details" title="View Details">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-edit-registrant" data-row-data="${rowData}" aria-label="Edit registrant" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
             </td>
-            <td>${safeText(row.province)}</td>
-            <td>${safeText(row.city)}</td>
-            <td>${safeText(row.name)}</td>
-            <td>${safeText(row.age)}</td>
+            <td class="province-cell" data-column="province">${safeText(row.province)}</td>
+            <td data-column="city">${safeText(row.city)}</td>
+            <td data-column="name">${safeText(row.name)}</td>
+            <td data-column="age">${safeText(row.age)}</td>
             <td><span class="chip chip-quiet">${safeText(row.brethren)}</span></td>
             <td>${safeText(row.outline)}</td>
             <td><span class="chip ${row.accommodation === 'None' ? 'chip-muted' : 'chip-primary'}">${safeText(row.accommodation)}</span></td>
@@ -1761,12 +1790,38 @@ function renderAdminTable(rows) {
             <td>${safeText(row.departureTranspo)}</td>
             <td>${safeText(row.paymentMode)}</td>
             <td>${formatAdminAmount(row.amount)}</td>
-            <td>${safeText(row.remarks)}</td>
-        </tr>
-    `;
+            <td style="max-width: 200px; word-wrap: break-word; overflow-wrap: break-word;">${safeText(row.remarks)}</td>
+        </tr>`;
     };
 
-    tbody.innerHTML = rows.map(buildRow).join('');
+    // Calculate starting row number based on current page
+    const startRowNumber = (adminCurrentPage - 1) * adminPageSize + 1;
+    
+    // Clear and rebuild table row by row to ensure proper structure
+    tbody.innerHTML = '';
+    const rowsHtml = rows.map((row, index) => buildRow(row, index, startRowNumber));
+    tbody.innerHTML = rowsHtml.join('');
+    
+    // Debug: Verify first row rendering
+    if (rows.length > 0) {
+        const firstRow = rows[0];
+        const firstTr = tbody.querySelector('tr');
+        if (firstTr) {
+            const cells = firstTr.querySelectorAll('td');
+            console.log('First row rendered cells:', {
+                cellCount: cells.length,
+                cell1_action: cells[0]?.textContent?.trim(),
+                cell2_province: cells[1]?.textContent?.trim(),
+                cell3_city: cells[2]?.textContent?.trim(),
+                cell4_name: cells[3]?.textContent?.trim(),
+                cell5_age: cells[4]?.textContent?.trim(),
+                expectedProvince: firstRow.province,
+                expectedCity: firstRow.city,
+                expectedName: firstRow.name,
+                expectedAge: firstRow.age
+            });
+        }
+    }
     
     // Attach click handlers to view buttons
     tbody.querySelectorAll('.btn-view-details').forEach(btn => {
@@ -1776,6 +1831,21 @@ function renderAdminTable(rows) {
                 try {
                     const rowData = JSON.parse(decodeURIComponent(rowDataAttr));
                     showRegistrantModal(rowData);
+                } catch (e) {
+                    console.error('Failed to parse row data:', e);
+                }
+            }
+        });
+    });
+    
+    // Attach click handlers to edit buttons
+    tbody.querySelectorAll('.btn-edit-registrant').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const rowDataAttr = btn.getAttribute('data-row-data');
+            if (rowDataAttr) {
+                try {
+                    const rowData = JSON.parse(decodeURIComponent(rowDataAttr));
+                    showEditRegistrantModal(rowData);
                 } catch (e) {
                     console.error('Failed to parse row data:', e);
                 }
@@ -2713,6 +2783,182 @@ function initNewRegistrantModal() {
     });
 }
 
+// Edit Registrant Modal Functions
+function showEditRegistrantModal(row) {
+    const modal = document.getElementById('editRegistrantModal');
+    if (!modal) return;
+    
+    if (!row.id) {
+        showNotification('Cannot edit: Missing registrant ID.', 'error');
+        return;
+    }
+    
+    const form = document.getElementById('editRegistrantForm');
+    if (form) {
+        // Populate form with existing data
+        document.getElementById('editRegistrantId').value = row.id || '';
+        document.getElementById('editName').value = row.name || '';
+        document.getElementById('editAge').value = row.age || '';
+        document.getElementById('editBrethren').value = row.brethren || '';
+        document.getElementById('editProvince').value = row.province || '';
+        document.getElementById('editCity').value = row.city || '';
+        document.getElementById('editOutline').value = row.outline || '';
+        document.getElementById('editAccommodation').value = row.accommodation || '';
+        document.getElementById('editRegistration').value = row.registration || '';
+        document.getElementById('editFood').value = row.food || '';
+        document.getElementById('editStatus').value = row.status || '';
+        document.getElementById('editTransportation').value = row.transportation || '';
+        document.getElementById('editArrivalDate').value = row.arrivalDate ? row.arrivalDate.split('T')[0] : '';
+        document.getElementById('editArrivalTime').value = row.arrivalTime || '';
+        document.getElementById('editArrivalTranspo').value = row.arrivalTranspo || '';
+        document.getElementById('editDepartureDate').value = row.departureDate ? row.departureDate.split('T')[0] : '';
+        document.getElementById('editDepartureTime').value = row.departureTime || '';
+        document.getElementById('editDepartureTranspo').value = row.departureTranspo || '';
+        document.getElementById('editPaymentMode').value = row.paymentMode || '';
+        document.getElementById('editAmount').value = row.amount || '';
+        document.getElementById('editRemarks').value = row.remarks || '';
+    }
+    
+    modal.classList.add('active');
+    body.style.overflow = 'hidden';
+}
+
+function closeEditRegistrantModal() {
+    const modal = document.getElementById('editRegistrantModal');
+    if (modal) {
+        modal.classList.remove('active');
+        body.style.overflow = '';
+        // Reset form
+        const form = document.getElementById('editRegistrantForm');
+        if (form) {
+            form.reset();
+        }
+    }
+}
+
+async function handleEditRegistrantSubmit(e) {
+    e.preventDefault();
+    
+    if (!isAdminAuthenticated()) {
+        showNotification('Please login first to edit registrants.', 'error');
+        return;
+    }
+
+    if (!supabaseClient) {
+        showNotification('Supabase client not configured.', 'error');
+        return;
+    }
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const registrantId = formData.get('id');
+    
+    if (!registrantId) {
+        showNotification('Cannot update: Missing registrant ID.', 'error');
+        return;
+    }
+    
+    // Build payload matching database schema
+    const payload = {
+        name: normalizeString(formData.get('name')),
+        age: formData.get('age') ? parseInt(formData.get('age'), 10) : null,
+        brethren: normalizeString(formData.get('brethren')),
+        province: normalizeString(formData.get('province')),
+        city: normalizeString(formData.get('city')),
+        outline: normalizeString(formData.get('outline')),
+        accommodation: normalizeString(formData.get('accommodation')),
+        registration: normalizeString(formData.get('registration')),
+        food: normalizeString(formData.get('food')),
+        status: normalizeString(formData.get('status')),
+        transportation: normalizeString(formData.get('transportation')),
+        arrival_date: formData.get('arrivalDate') || null,
+        arrival_time: normalizeString(formData.get('arrivalTime')),
+        arrival_transpo: normalizeString(formData.get('arrivalTranspo')),
+        departure_date: formData.get('departureDate') || null,
+        departure_time: normalizeString(formData.get('departureTime')),
+        departure_transpo: normalizeString(formData.get('departureTranspo')),
+        payment_mode: normalizeString(formData.get('paymentMode')),
+        amount: formData.get('amount') ? parseFloat(formData.get('amount')) : null,
+        remarks: normalizeString(formData.get('remarks'))
+    };
+
+    // Validate required field
+    if (!payload.name) {
+        showNotification('Name is required.', 'error');
+        return;
+    }
+
+    showImportLoader('Updating registrant...');
+    
+    try {
+        const { data: sessionData } = await supabaseClient.auth.getSession();
+        if (!sessionData?.session) {
+            showNotification('Your session expired. Please log in again.', 'error');
+            return;
+        }
+
+        const { error } = await supabaseClient
+            .from('registrants')
+            .update(payload)
+            .eq('id', registrantId);
+        
+        if (error) {
+            console.error('Supabase update error:', error);
+            const msg = error?.message ? `Failed to update registrant: ${error.message}` : 'Failed to update registrant. Please try again.';
+            showNotification(msg, 'error');
+            return;
+        }
+
+        // Refresh data
+        adminRegistrants = await fetchAdminRegistrants();
+        populateFilterOptions();
+        const filtered = getFilteredAdminData();
+        adminFilteredCache = filtered;
+        const { pageData } = getPagedAdminData(filtered);
+        renderAdminTable(pageData);
+        updateAdminStats(adminRegistrants); // Show stats for ALL data, not filtered
+        updateAdminResultCount(filtered.length, adminRegistrants.length);
+        const totalPages = Math.max(1, Math.ceil(filtered.length / adminPageSize));
+        updateAdminPagination(totalPages);
+
+        showNotification('Registrant updated successfully!', 'success');
+        closeEditRegistrantModal();
+    } catch (err) {
+        console.error('Error updating registrant:', err);
+        showNotification('An error occurred while updating the registrant.', 'error');
+    } finally {
+        hideImportLoader();
+    }
+}
+
+function initEditRegistrantModal() {
+    const modal = document.getElementById('editRegistrantModal');
+    const closeBtn = modal?.querySelector('.registrant-modal-close');
+    const overlay = modal?.querySelector('.registrant-modal-overlay');
+    const cancelBtn = document.getElementById('cancelEditRegistrant');
+    const form = document.getElementById('editRegistrantForm');
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeEditRegistrantModal);
+    }
+    if (overlay) {
+        overlay.addEventListener('click', closeEditRegistrantModal);
+    }
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeEditRegistrantModal);
+    }
+    if (form) {
+        form.addEventListener('submit', handleEditRegistrantSubmit);
+    }
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal?.classList.contains('active')) {
+            closeEditRegistrantModal();
+        }
+    });
+}
+
 // Print Options Modal Functions
 function showPrintOptionsModal() {
     const modal = document.getElementById('printOptionsModal');
@@ -2864,6 +3110,7 @@ function initAll() {
         initRegistrantModal();
         initAllRegistrantsModal();
         initNewRegistrantModal();
+        initEditRegistrantModal();
         initPrintOptionsModal();
     }
     

@@ -4118,6 +4118,11 @@ body {
     border-collapse: separate;
     border-spacing: 0;
     min-width: 980px;
+    table-layout: auto;
+}
+
+.admin-table colgroup {
+    display: none;
 }
 
 .admin-table th,
@@ -4204,6 +4209,17 @@ body {
 
 .admin-table tbody td:last-child {
     border-right: none;
+    max-width: 200px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.admin-table tbody td[data-column="remarks"],
+.admin-table tbody td:nth-child(21) {
+    max-width: 200px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .admin-table tbody tr:nth-child(even) {
@@ -4964,13 +4980,46 @@ body {
     position: relative;
 }
 
-.action-cell {
-    text-align: center;
-    width: 60px;
+.admin-table td[data-column="number"],
+.admin-table td:first-child {
+    text-align: center !important;
+    width: 50px !important;
+    min-width: 50px !important;
+    max-width: 50px !important;
     padding: 0.75rem !important;
+    display: table-cell !important;
+    visibility: visible !important;
+    font-weight: 600;
+    color: #64748b;
 }
 
-.btn-view-details {
+.action-cell {
+    text-align: center !important;
+    width: 90px !important;
+    min-width: 90px !important;
+    max-width: 90px !important;
+    padding: 0.75rem !important;
+    display: table-cell !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+}
+
+.province-cell {
+    min-width: 120px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: nowrap;
+}
+
+.btn-view-details,
+.btn-edit-registrant {
     background: linear-gradient(135deg, #2c5aa0 0%, #1e3a5f 100%);
     border: none;
     color: #fff;
@@ -4988,12 +5037,27 @@ body {
 
 .btn-view-details:hover {
     background: linear-gradient(135deg, #1e3a5f 0%, #2c5aa0 100%);
-    transform: scale(1.15) rotate(90deg);
+    transform: scale(1.15);
     box-shadow: 0 6px 20px rgba(44, 90, 160, 0.4);
 }
 
 .btn-view-details:active {
-    transform: scale(1.05) rotate(90deg);
+    transform: scale(1.05);
+}
+
+.btn-edit-registrant {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+}
+
+.btn-edit-registrant:hover {
+    background: linear-gradient(135deg, #047857 0%, #059669 100%);
+    transform: scale(1.15);
+    box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+}
+
+.btn-edit-registrant:active {
+    transform: scale(1.05);
 }
 
 .admin-actions {
