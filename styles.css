@@ -4158,6 +4158,16 @@ body {
     white-space: nowrap;
 }
 
+.admin-table th:first-child {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+    text-align: center;
+    position: sticky;
+    left: 0;
+    z-index: 11;
+}
+
 .admin-table th:last-child {
     border-right: none;
 }
@@ -4972,14 +4982,16 @@ body {
 
 .action-cell {
     text-align: center;
-    width: 90px;
-    min-width: 90px;
-    max-width: 90px;
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
     padding: 0.75rem !important;
     position: sticky;
     left: 0;
     background: #ffffff;
     z-index: 5;
+    overflow: visible;
+    white-space: nowrap;
 }
 
 .province-cell {
@@ -4993,10 +5005,13 @@ body {
 }
 
 .action-buttons {
-    display: flex;
+    display: flex !important;
     gap: 0.5rem;
     align-items: center;
     justify-content: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow: visible;
 }
 
 .btn-view-details,
@@ -5006,15 +5021,19 @@ body {
     color: #fff;
     width: 36px;
     height: 36px;
+    min-width: 36px;
+    min-height: 36px;
     border-radius: 8px;
     cursor: pointer;
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    opacity: 1;
+    opacity: 1 !important;
+    visibility: visible !important;
     transition: all 0.2s ease;
     font-size: 0.9rem;
     box-shadow: 0 2px 8px rgba(44, 90, 160, 0.2);
+    flex-shrink: 0;
 }
 
 .btn-view-details {

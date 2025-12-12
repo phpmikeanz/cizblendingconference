@@ -877,10 +877,15 @@ async function fetchAdminRegistrants() {
 
     console.log(`Fetched ${allData.length} total registrants from database`);
 
-    return allData.map(row => ({
+    return allData.map(row => {
+        // Handle both 'city' and 'locality' column names
+        const cityValue = row.city || row.locality || null;
+        const provinceValue = row.province || null;
+        
+        return {
         id: row.id, // Include ID for updates
-        province: row.province ? String(row.province).trim() : null,
-        city: row.city ? String(row.city).trim() : null,
+        province: provinceValue ? String(provinceValue).trim() : null,
+        city: cityValue ? String(cityValue).trim() : null,
         name: row.name ? String(row.name).trim() : null,
         age: row.age,
         brethren: row.brethren ? String(row.brethren).trim() : null,
@@ -899,7 +904,8 @@ async function fetchAdminRegistrants() {
         paymentMode: row.payment_mode ? String(row.payment_mode).trim() : null,
         amount: row.amount,
         remarks: row.remarks ? String(row.remarks).trim() : null
-    }));
+        };
+    });
 }
 
 function normalizeHeader(key) {
