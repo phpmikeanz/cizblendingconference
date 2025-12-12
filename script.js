@@ -838,7 +838,7 @@ async function fetchAdminRegistrants() {
     if (tbody) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="23" class="empty-row">Loading registrants from Supabase...</td>
+                <td colspan="21" class="empty-row">Loading registrants from Supabase...</td>
             </tr>
         `;
     }
@@ -876,18 +876,6 @@ async function fetchAdminRegistrants() {
     }
 
     console.log(`Fetched ${allData.length} total registrants from database`);
-
-    // Debug: Log first row to check column mapping
-    if (allData.length > 0) {
-        console.log('Sample row from Supabase:', {
-            id: allData[0].id,
-            province: allData[0].province,
-            city: allData[0].city,
-            name: allData[0].name,
-            age: allData[0].age,
-            allKeys: Object.keys(allData[0])
-        });
-    }
 
     return allData.map(row => ({
         id: row.id, // Include ID for updates
@@ -1740,42 +1728,30 @@ function renderAdminTable(rows) {
     if (!rows.length) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="23" class="empty-row">No registrants match the current filters.</td>
+                <td colspan="21" class="empty-row">No registrants match the current filters.</td>
             </tr>
         `;
         return;
     }
 
-    const buildRow = (row, index, startNumber = 1) => {
+    const buildRow = (row) => {
         const rowData = encodeURIComponent(JSON.stringify(row));
-        const rowNumber = startNumber + index;
-        // Debug: Log what we're about to render for first row
-        if (index === 0) {
-            console.log('Building first row with data:', {
-                rowNumber: rowNumber,
-                province: row.province,
-                city: row.city,
-                name: row.name,
-                age: row.age
-            });
-        }
-        return `<tr>
-            <td style="width: 30px; min-width: 30px; padding: 0.75rem; display: table-cell !important; visibility: visible !important;"></td>
-            <td data-column="number" style="text-align: center; font-weight: 600; color: #64748b; width: 50px; min-width: 50px; padding: 0.75rem; display: table-cell !important; visibility: visible !important;">${rowNumber}</td>
-            <td class="action-cell" data-column="actions" style="width: 90px !important; min-width: 90px !important; max-width: 90px !important; padding: 0.75rem !important; text-align: center !important; display: table-cell !important; visibility: visible !important; opacity: 1 !important; position: relative !important; background: transparent !important;">
-                <div class="action-buttons" style="display: flex !important; gap: 0.5rem !important; align-items: center !important; justify-content: center !important; width: 100% !important; flex-wrap: nowrap !important;">
-                    <button class="btn-view-details" data-row-data="${rowData}" aria-label="View details" title="View Details" style="display: inline-flex !important; visibility: visible !important; opacity: 1 !important;">
+        return `
+        <tr>
+            <td class="action-cell">
+                <div class="action-buttons">
+                    <button class="btn-view-details" data-row-data="${rowData}" aria-label="View details" title="View Details">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="btn-edit-registrant" data-row-data="${rowData}" aria-label="Edit registrant" title="Edit" style="display: inline-flex !important; visibility: visible !important; opacity: 1 !important;">
+                    <button class="btn-edit-registrant" data-row-data="${rowData}" aria-label="Edit registrant" title="Edit">
                         <i class="fas fa-edit"></i>
                     </button>
                 </div>
             </td>
-            <td class="province-cell" data-column="province">${safeText(row.province)}</td>
-            <td data-column="city">${safeText(row.city)}</td>
-            <td data-column="name">${safeText(row.name)}</td>
-            <td data-column="age">${safeText(row.age)}</td>
+            <td>${safeText(row.province)}</td>
+            <td>${safeText(row.city)}</td>
+            <td>${safeText(row.name)}</td>
+            <td>${safeText(row.age)}</td>
             <td><span class="chip chip-quiet">${safeText(row.brethren)}</span></td>
             <td>${safeText(row.outline)}</td>
             <td><span class="chip ${row.accommodation === 'None' ? 'chip-muted' : 'chip-primary'}">${safeText(row.accommodation)}</span></td>
@@ -1791,38 +1767,12 @@ function renderAdminTable(rows) {
             <td>${safeText(row.departureTranspo)}</td>
             <td>${safeText(row.paymentMode)}</td>
             <td>${formatAdminAmount(row.amount)}</td>
-            <td style="max-width: 200px; word-wrap: break-word; overflow-wrap: break-word;">${safeText(row.remarks)}</td>
-        </tr>`;
+            <td>${safeText(row.remarks)}</td>
+        </tr>
+    `;
     };
 
-    // Calculate starting row number based on current page
-    const startRowNumber = (adminCurrentPage - 1) * adminPageSize + 1;
-    
-    // Clear and rebuild table row by row to ensure proper structure
-    tbody.innerHTML = '';
-    const rowsHtml = rows.map((row, index) => buildRow(row, index, startRowNumber));
-    tbody.innerHTML = rowsHtml.join('');
-    
-    // Debug: Verify first row rendering
-    if (rows.length > 0) {
-        const firstRow = rows[0];
-        const firstTr = tbody.querySelector('tr');
-        if (firstTr) {
-            const cells = firstTr.querySelectorAll('td');
-            console.log('First row rendered cells:', {
-                cellCount: cells.length,
-                cell1_action: cells[0]?.textContent?.trim(),
-                cell2_province: cells[1]?.textContent?.trim(),
-                cell3_city: cells[2]?.textContent?.trim(),
-                cell4_name: cells[3]?.textContent?.trim(),
-                cell5_age: cells[4]?.textContent?.trim(),
-                expectedProvince: firstRow.province,
-                expectedCity: firstRow.city,
-                expectedName: firstRow.name,
-                expectedAge: firstRow.age
-            });
-        }
-    }
+    tbody.innerHTML = rows.map(buildRow).join('');
     
     // Attach click handlers to view buttons
     tbody.querySelectorAll('.btn-view-details').forEach(btn => {
